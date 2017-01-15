@@ -1,0 +1,28 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/run_now_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.onpanic.hiddenbackup.fragments.BackupNow">
+
+
+    <ImageView
+        android:id="@+id/run_backup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"
+        app:srcCompat="@drawable/backup" />
+
+    <TextView
+        android:id="@+id/run_backup_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/run_backup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+</RelativeLayout>
