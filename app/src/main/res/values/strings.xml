@@ -2,9 +2,11 @@
     <string name="app_name">Hidden Backup</string>
     <string name="action_settings">Settings</string>
     <string name="notifications">Notifications</string>
-    <string name="add_backup_dirs">Add Dirs</string>
+    <string name="add_backup_dirs">Add dirs</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="scheduled_backups">Scheduled backups</string>
+    <string name="run_backup">Run backup</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>
 </resources>
