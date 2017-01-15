@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/run_backup_now"
+            android:title="@string/app_name" />
+        <item
+            android:id="@+id/add_backup_dirs"
+            android:title="@string/add_backup_dirs" />
+        <item
+            android:id="@+id/notifications"
+            android:title="@string/notifications" />
+    </group>
+</menu>
