@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import org.onpanic.deletefiles.R;
+import org.onpanic.hiddenbackup.R;
 
 
 public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
