@@ -10,6 +10,8 @@
     <string name="none">None</string>
     <string name="allowed_trigger_app_summary">Select which app is authorized to send panic alerts</string>
     <string name="allowed_trigger_app">Allowed trigger app</string>
+    <string name="runned_notification_content">Your files are safe</string>
+    <string name="runned_notification_title">Backup send</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>
     <string name="pref_trigger_app" translatable="false">pref_trigger_app</string>
