@@ -39,6 +39,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".providers.DirsProvider"
+            android:authorities="org.onpanic.hiddenbackup.DIRS_PROVIDER"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>
