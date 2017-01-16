@@ -114,9 +114,6 @@ public class HiddenBackupActivity extends AppCompatActivity implements
                 case R.id.scheduled:
                     // TODO
                     break;
-                case R.id.notifications:
-                    // TODO
-                    break;
             }
         }
 

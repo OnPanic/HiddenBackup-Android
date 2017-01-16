@@ -10,8 +10,5 @@
         <item
             android:id="@+id/scheduled"
             android:title="@string/scheduled_backups" />
-        <item
-            android:id="@+id/notifications"
-            android:title="@string/notifications" />
     </group>
 </menu>
