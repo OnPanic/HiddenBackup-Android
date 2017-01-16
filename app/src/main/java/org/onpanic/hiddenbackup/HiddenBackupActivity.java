@@ -2,7 +2,9 @@ package org.onpanic.hiddenbackup;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +28,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
     private DrawerLayout drawer;
     private FragmentManager mFragmentManager;
     private boolean isOrbotInstalled;
+    private boolean hasServerConf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        hasServerConf = (preferences.getString(getString(R.string.pref_server_onion), null) != null);
         isOrbotInstalled = OrbotHelper.isOrbotInstalled(this);
 
         // Do not overlapping fragments.
@@ -52,6 +57,10 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         if (!isOrbotInstalled) {
             AppSetup setup = new AppSetup();
             setup.orbotSetup();
+            transaction.replace(R.id.fragment_container, setup);
+        } else if (!hasServerConf) {
+            AppSetup setup = new AppSetup();
+            setup.serverSetup();
             transaction.replace(R.id.fragment_container, setup);
         } else {
             transaction.replace(R.id.fragment_container, new BackupNow());
@@ -68,41 +77,12 @@ public class HiddenBackupActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (!isOrbotInstalled) {
-            AppSetup setup = new AppSetup();
-            setup.orbotSetup();
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, setup)
-                    .commit();
-
-            return true;
-        }
-
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.action_settings:
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new HiddenBackupSettings())
-                        .commit();
-                break;
-            case R.id.run_backup_now:
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new BackupNow())
-                        .commit();
-                break;
-            case R.id.add_backup_dirs:
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, new DirsFragment())
-                        .commit();
-                break;
-            case R.id.scheduled:
-                // TODO
-                break;
-            case R.id.notifications:
-                // TODO
-                break;
+        if (id == R.id.action_settings) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, new HiddenBackupSettings())
+                    .commit();
         }
 
         return super.onOptionsItemSelected(item);
@@ -110,12 +90,37 @@ public class HiddenBackupActivity extends AppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.run_backup_now:
-                // TODO
-                break;
+        if (!isOrbotInstalled) {
+            AppSetup setup = new AppSetup();
+            setup.orbotSetup();
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, setup)
+                    .commit();
+        } else if (!hasServerConf) {
+            AppSetup setup = new AppSetup();
+            setup.serverSetup();
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, setup)
+                    .commit();
+        } else {
+            switch (item.getItemId()) {
+                case R.id.run_backup_now:
+                    mFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, new BackupNow())
+                            .commit();
+                    break;
+                case R.id.add_backup_dirs:
+                    mFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, new DirsFragment())
+                            .commit();
+                    break;
+                case R.id.scheduled:
+                    // TODO
+                    break;
+                case R.id.notifications:
+                    // TODO
+                    break;
+            }
         }
 
         drawer.closeDrawer(GravityCompat.START);

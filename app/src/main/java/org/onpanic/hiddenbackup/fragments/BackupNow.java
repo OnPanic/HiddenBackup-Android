@@ -11,11 +11,9 @@ import org.onpanic.hiddenbackup.R;
 
 public class BackupNow extends Fragment {
 
-
     public BackupNow() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

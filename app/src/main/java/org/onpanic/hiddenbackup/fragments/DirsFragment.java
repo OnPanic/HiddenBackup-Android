@@ -11,11 +11,9 @@ import org.onpanic.hiddenbackup.R;
 
 public class DirsFragment extends Fragment {
 
-
     public DirsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
