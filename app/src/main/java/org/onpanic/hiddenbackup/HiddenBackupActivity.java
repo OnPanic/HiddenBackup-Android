@@ -93,29 +93,23 @@ public class HiddenBackupActivity extends AppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+
         if (!isOrbotInstalled) {
             AppSetup setup = new AppSetup();
             setup.orbotSetup();
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, setup)
-                    .commit();
+            transaction.replace(R.id.fragment_container, setup);
         } else if (!hasServerConf) {
             AppSetup setup = new AppSetup();
             setup.serverSetup();
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, setup)
-                    .commit();
+            transaction.replace(R.id.fragment_container, setup);
         } else {
             switch (item.getItemId()) {
                 case R.id.run_backup_now:
-                    mFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, new BackupNow())
-                            .commit();
+                    transaction.replace(R.id.fragment_container, new BackupNow());
                     break;
                 case R.id.add_backup_dirs:
-                    mFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, new DirsFragment())
-                            .commit();
+                    transaction.replace(R.id.fragment_container, new DirsFragment());
                     break;
                 case R.id.scheduled:
                     // TODO
@@ -125,6 +119,8 @@ public class HiddenBackupActivity extends AppCompatActivity implements
                     break;
             }
         }
+
+        transaction.commit();
 
         drawer.closeDrawer(GravityCompat.START);
 
