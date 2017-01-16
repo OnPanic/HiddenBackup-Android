@@ -34,7 +34,7 @@ public class AppSetup extends Fragment {
                              Bundle savedInstanceState) {
 
         Snackbar.make(getActivity().findViewById(android.R.id.content),
-                R.string.install_orbot,
+                snackMessage,
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(snackAction, clickListener)
                 .show();
