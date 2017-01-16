@@ -21,7 +21,7 @@ public class BackupNow extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_backup_now, container, false);
+        return inflater.inflate(R.layout.fragment_big_action_button, container, false);
     }
 
 }

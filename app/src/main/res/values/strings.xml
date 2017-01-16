@@ -13,6 +13,7 @@
     <string name="runned_notification_content">Your files are safe</string>
     <string name="runned_notification_title">Backup send</string>
     <string name="install_orbot">Install Orbot</string>
+    <string name="orbot_is_not_installed">Orbot is not installed</string>
     <string name="install">Install</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>

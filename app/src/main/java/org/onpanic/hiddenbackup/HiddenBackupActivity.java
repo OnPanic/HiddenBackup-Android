@@ -1,10 +1,10 @@
 package org.onpanic.hiddenbackup;
 
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,8 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
+import org.onpanic.hiddenbackup.fragments.AppSetup;
 import org.onpanic.hiddenbackup.fragments.BackupNow;
 import org.onpanic.hiddenbackup.fragments.DirsFragment;
 import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
@@ -25,6 +25,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
 
     private DrawerLayout drawer;
     private FragmentManager mFragmentManager;
+    private boolean isOrbotInstalled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,25 +42,22 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if (!OrbotHelper.isOrbotInstalled(this)) {
-            Snackbar.make(findViewById(android.R.id.content),
-                    R.string.install_orbot,
-                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.install,
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(OrbotHelper.getOrbotInstallIntent(HiddenBackupActivity.this));
-                            finish();
-                        }
-                    }).show();
-        }
+        isOrbotInstalled = OrbotHelper.isOrbotInstalled(this);
 
         // Do not overlapping fragments.
         if (savedInstanceState != null) return;
 
-        mFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, new BackupNow())
-                .commit();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+
+        if (!isOrbotInstalled) {
+            AppSetup setup = new AppSetup();
+            setup.orbotSetup();
+            transaction.replace(R.id.fragment_container, setup);
+        } else {
+            transaction.replace(R.id.fragment_container, new BackupNow());
+        }
+
+        transaction.commit();
     }
 
     @Override
@@ -70,12 +68,28 @@ public class HiddenBackupActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (!isOrbotInstalled) {
+            AppSetup setup = new AppSetup();
+            setup.orbotSetup();
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, setup)
+                    .commit();
+
+            return true;
+        }
+
         int id = item.getItemId();
 
         switch (id) {
             case R.id.action_settings:
                 mFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new HiddenBackupSettings())
+                        .commit();
+                break;
+            case R.id.run_backup_now:
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, new BackupNow())
                         .commit();
                 break;
             case R.id.add_backup_dirs:

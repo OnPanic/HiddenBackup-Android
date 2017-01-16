@@ -1,28 +1,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/run_now_layout"
+    android:id="@+id/big_action_button_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="org.onpanic.hiddenbackup.fragments.BackupNow">
+    android:layout_height="match_parent">
 
 
     <ImageView
-        android:id="@+id/run_backup"
+        android:id="@+id/big_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="115dp"
         app:srcCompat="@drawable/backup" />
 
     <TextView
-        android:id="@+id/run_backup_summary"
+        android:id="@+id/big_action_button_summary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/run_backup"
+        android:layout_below="@+id/big_action_button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:textAlignment="center"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textStyle="normal|bold" />
 </RelativeLayout>
