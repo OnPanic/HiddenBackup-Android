@@ -45,6 +45,9 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         hasServerConf = (preferences.getString(getString(R.string.pref_server_onion), null) != null);
         isOrbotInstalled = OrbotHelper.isOrbotInstalled(this);
