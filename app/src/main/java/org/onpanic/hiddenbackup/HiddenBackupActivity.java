@@ -49,6 +49,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
                         @Override
                         public void onClick(View v) {
                             startActivity(OrbotHelper.getOrbotInstallIntent(HiddenBackupActivity.this));
+                            finish();
                         }
                     }).show();
         }
