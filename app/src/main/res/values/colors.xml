@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#43444e</color>
     <color name="colorAccent">#526579</color>
     <color name="gray">#FFDDDDDD</color>
+    <color name="fm_back_background">#389ad6</color>
 </resources>

@@ -18,12 +18,17 @@ import android.view.MenuItem;
 import org.onpanic.hiddenbackup.fragments.AppSetup;
 import org.onpanic.hiddenbackup.fragments.BackupNow;
 import org.onpanic.hiddenbackup.fragments.DirsFragment;
+import org.onpanic.hiddenbackup.fragments.FileManagerFragment;
 import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
+
+import java.util.ArrayList;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 
 public class HiddenBackupActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener,
+        DirsFragment.OnDirClickListener,
+        FileManagerFragment.OnSavePaths {
 
     private DrawerLayout drawer;
     private FragmentManager mFragmentManager;
@@ -131,5 +136,15 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onDirClick(int id) {
+
+    }
+
+    @Override
+    public void save(ArrayList<String> files) {
+
     }
 }

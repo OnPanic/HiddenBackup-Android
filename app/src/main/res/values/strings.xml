@@ -23,6 +23,8 @@
     <string name="runned_notification">Notify backup</string>
     <string name="runned_notification_summary">Shows a notification after a backup completes</string>
     <string name="panic_category">On Panic Settings</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>
     <string name="pref_trigger_app" translatable="false">pref_trigger_app</string>

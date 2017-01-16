@@ -12,10 +12,10 @@
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/apps_list"
+        android:id="@+id/dirs_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/dirs_fragment" />
+        tools:listitem="@layout/dir_item_fragment" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
