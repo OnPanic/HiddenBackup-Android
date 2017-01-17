@@ -6,13 +6,11 @@ import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
@@ -22,6 +20,7 @@ import info.guardianproject.netcipher.proxy.OrbotHelper;
 
 public class AppSetup extends Fragment {
     private Context mContext;
+    private OnScanQRCallback onScanQRCallback;
 
     private View.OnClickListener clickListener;
 
@@ -55,7 +54,7 @@ public class AppSetup extends Fragment {
         barcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(OrbotHelper.getOrbotInstallIntent(mContext));
+                startActivity(BarcodeScannerHelper.getInstallIntent(mContext));
             }
         });
 
@@ -64,7 +63,7 @@ public class AppSetup extends Fragment {
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO
+                onScanQRCallback.onScanQR();
             }
         });
 
@@ -75,5 +74,22 @@ public class AppSetup extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+
+        if (mContext instanceof OnScanQRCallback) {
+            onScanQRCallback = (OnScanQRCallback) mContext;
+        } else {
+            throw new RuntimeException(mContext.toString()
+                    + " must implement OnScanQRCallback");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onScanQRCallback = null;
+    }
+
+    public interface OnScanQRCallback {
+        void onScanQR();
     }
 }

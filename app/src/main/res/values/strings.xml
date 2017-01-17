@@ -22,6 +22,8 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="install_barcode">Install Qr Scanner</string>
+    <string name="cookie_to_clipboard">Auth cookie copied to clipboard</string>
+    <string name="add_server_failure">Unable to read server configuration</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>
     <string name="pref_trigger_app" translatable="false">pref_trigger_app</string>

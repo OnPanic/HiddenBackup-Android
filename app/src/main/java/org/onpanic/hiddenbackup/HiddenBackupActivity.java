@@ -1,7 +1,12 @@
 package org.onpanic.hiddenbackup;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,7 +19,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
 import org.onpanic.hiddenbackup.fragments.AppSetup;
 import org.onpanic.hiddenbackup.fragments.BackupNow;
 import org.onpanic.hiddenbackup.fragments.DirsFragment;
@@ -25,15 +34,15 @@ import org.onpanic.hiddenbackup.helpers.CheckDependenciesHelper;
 
 import java.util.ArrayList;
 
-import info.guardianproject.netcipher.proxy.OrbotHelper;
-
 public class HiddenBackupActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         DirsFragment.OnDirClickListener,
-        FileManagerFragment.OnSavePaths {
+        FileManagerFragment.OnSavePaths,
+        AppSetup.OnScanQRCallback {
 
     private DrawerLayout drawer;
     private FragmentManager mFragmentManager;
+    private boolean resumeAfterQRScan = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +65,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         // Do not overlapping fragments.
         if (savedInstanceState != null) return;
 
-        FragmentTransaction transaction = mFragmentManager.beginTransaction();
-
-        if (!CheckDependenciesHelper.checkAll(this)) {
-            transaction.replace(R.id.fragment_container, new AppSetup());
-        } else {
-            transaction.replace(R.id.fragment_container, new BackupNow());
-        }
-
-        transaction.commit();
+        initFragment();
     }
 
     @Override
@@ -115,12 +116,64 @@ public class HiddenBackupActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (resumeAfterQRScan) {
+            initFragment();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case HiddenBackupConstants.SCAN_RESULT:
+                resumeAfterQRScan = true;
+                if (resultCode == Activity.RESULT_OK) {
+                    try {
+                        JSONObject qr_data = new JSONObject(data.getStringExtra("SCAN_RESULT"));
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                        SharedPreferences.Editor edit = preferences.edit();
+                        edit.putString(getString(R.string.pref_server_onion), qr_data.getString("host"));
+                        edit.putString(getString(R.string.pref_server_port), qr_data.getString("port"));
+                        edit.apply();
+
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("cookie", qr_data.getString("cookie"));
+                        clipboard.setPrimaryClip(clip);
+
+                        Toast.makeText(this, R.string.cookie_to_clipboard, Toast.LENGTH_LONG).show();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, R.string.add_server_failure, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void initFragment() {
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+
+        if (!CheckDependenciesHelper.checkAll(this)) {
+            transaction.replace(R.id.fragment_container, new AppSetup());
+        } else {
+            transaction.replace(R.id.fragment_container, new BackupNow());
+        }
+
+        transaction.commit();
     }
 
     @Override
@@ -131,5 +184,10 @@ public class HiddenBackupActivity extends AppCompatActivity implements
     @Override
     public void save(ArrayList<String> files) {
 
+    }
+
+    @Override
+    public void onScanQR() {
+        startActivityForResult(BarcodeScannerHelper.getScanIntent(), HiddenBackupConstants.SCAN_RESULT);
     }
 }
