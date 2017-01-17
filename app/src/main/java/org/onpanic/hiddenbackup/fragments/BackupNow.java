@@ -3,6 +3,7 @@ package org.onpanic.hiddenbackup.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.onpanic.hiddenbackup.R;
-
-import info.guardianproject.netcipher.proxy.OrbotHelper;
+import org.onpanic.hiddenbackup.services.BackupService;
 
 public class BackupNow extends Fragment {
     private ImageView image;
@@ -36,7 +36,8 @@ public class BackupNow extends Fragment {
             public void onClick(View view) {
                 animation = AnimationUtils.loadAnimation(mContext, R.anim.clockwise);
                 image.startAnimation(animation);
-                OrbotHelper.requestStartTor(mContext);
+                Intent intent = new Intent(mContext, BackupService.class);
+                mContext.startService(intent);
             }
         });
 

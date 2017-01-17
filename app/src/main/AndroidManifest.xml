@@ -28,7 +28,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.PanicResponseActivity"
             android:noHistory="true"
@@ -45,6 +44,11 @@
             android:authorities="org.onpanic.hiddenbackup.DIRS_PROVIDER"
             android:enabled="true"
             android:exported="false" />
+
+        <service
+            android:name=".services.BackupService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>
