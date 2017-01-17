@@ -20,6 +20,7 @@ import org.onpanic.hiddenbackup.fragments.BackupNow;
 import org.onpanic.hiddenbackup.fragments.DirsFragment;
 import org.onpanic.hiddenbackup.fragments.FileManagerFragment;
 import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
+import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
     private DrawerLayout drawer;
     private FragmentManager mFragmentManager;
     private boolean isOrbotInstalled;
+    private boolean isBarcodeInstalled;
     private boolean hasServerConf;
 
     @Override
@@ -56,6 +58,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         hasServerConf = (preferences.getString(getString(R.string.pref_server_onion), null) != null);
         isOrbotInstalled = OrbotHelper.isOrbotInstalled(this);
+        isBarcodeInstalled = BarcodeScannerHelper.isAppInstalled(this);
 
         // Do not overlapping fragments.
         if (savedInstanceState != null) return;
@@ -65,6 +68,10 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         if (!isOrbotInstalled) {
             AppSetup setup = new AppSetup();
             setup.orbotSetup();
+            transaction.replace(R.id.fragment_container, setup);
+        } else if (!isBarcodeInstalled) {
+            AppSetup setup = new AppSetup();
+            setup.barcodeSetup();
             transaction.replace(R.id.fragment_container, setup);
         } else if (!hasServerConf) {
             AppSetup setup = new AppSetup();
@@ -104,6 +111,10 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         if (!isOrbotInstalled) {
             AppSetup setup = new AppSetup();
             setup.orbotSetup();
+            transaction.replace(R.id.fragment_container, setup);
+        } else if (!isBarcodeInstalled) {
+            AppSetup setup = new AppSetup();
+            setup.barcodeSetup();
             transaction.replace(R.id.fragment_container, setup);
         } else if (!hasServerConf) {
             AppSetup setup = new AppSetup();

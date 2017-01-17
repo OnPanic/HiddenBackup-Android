@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.onpanic.hiddenbackup.R;
+import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 
@@ -78,6 +79,18 @@ public class AppSetup extends Fragment {
             @Override
             public void onClick(View v) {
                 // TODO: Scan QR
+            }
+        };
+    }
+
+    public void barcodeSetup() {
+        snackMessage = R.string.install_barcode;
+        snackAction = R.string.install;
+        textMessage = R.string.barcode_is_not_installed;
+        clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(BarcodeScannerHelper.getInstallIntent(mContext));
             }
         };
     }

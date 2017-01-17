@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import java.util.List;
 
 public class BarcodeScannerHelper {
-    private static boolean isAppInstalled(Context context) {
+    public static boolean isAppInstalled(Context context) {
         try {
             PackageManager p = context.getPackageManager();
             p.getPackageInfo("com.google.zxing.client.android", PackageManager.GET_ACTIVITIES);

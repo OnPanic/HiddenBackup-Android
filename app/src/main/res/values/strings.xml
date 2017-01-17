@@ -25,6 +25,8 @@
     <string name="panic_category">On Panic Settings</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="install_barcode">Install Barcode Scanner</string>
+    <string name="barcode_is_not_installed">Barcode Scanner is not installed</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>
     <string name="pref_trigger_app" translatable="false">pref_trigger_app</string>
