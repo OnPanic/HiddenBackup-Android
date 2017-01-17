@@ -70,7 +70,7 @@ public class FMItemsAdapter extends RecyclerView.Adapter<FMItemsAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return dirContent.length;
+        return (dirContent == null) ? 0 : dirContent.length;
     }
 
     public void goUp() {

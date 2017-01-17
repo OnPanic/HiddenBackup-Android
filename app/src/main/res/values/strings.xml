@@ -21,10 +21,12 @@
     <string name="panic_category">On Panic Settings</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="grant">Grant</string>
     <string name="install_barcode">Install Qr Scanner</string>
     <string name="cookie_to_clipboard">Auth cookie copied to clipboard</string>
     <string name="add_server_failure">Unable to read server configuration</string>
     <string name="backup_is_running">Backup is running</string>
+    <string name="please_grant_permissions_for_external_storage">Please grant permissions for external storage</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>
     <string name="pref_trigger_app" translatable="false">pref_trigger_app</string>

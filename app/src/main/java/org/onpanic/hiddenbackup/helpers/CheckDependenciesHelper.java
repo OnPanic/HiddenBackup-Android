@@ -10,7 +10,6 @@ import info.guardianproject.netcipher.proxy.OrbotHelper;
 
 public class CheckDependenciesHelper {
     public static boolean checkAll(Context context) {
-
         return checkOrbot(context) && checkBarcode(context) && checkServer(context);
     }
 

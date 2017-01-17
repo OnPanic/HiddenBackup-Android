@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ import org.onpanic.hiddenbackup.fragments.FileManagerFragment;
 import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
 import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
 import org.onpanic.hiddenbackup.helpers.CheckDependenciesHelper;
+import org.onpanic.hiddenbackup.permissions.PermissionManager;
 
 import java.util.ArrayList;
 
@@ -64,6 +66,10 @@ public class HiddenBackupActivity extends AppCompatActivity implements
 
         // Do not overlapping fragments.
         if (savedInstanceState != null) return;
+
+        if (PermissionManager.isLollipopOrHigher() && !PermissionManager.hasExternalWritePermission(this)) {
+            PermissionManager.requestExternalWritePermissions(this, HiddenBackupConstants.REQUEST_WRITE_STORAGE);
+        }
 
         initFragment();
     }
@@ -162,6 +168,22 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case HiddenBackupConstants.REQUEST_WRITE_STORAGE: {
+                if (grantResults.length < 1 || grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    // Request rationale
+                    PermissionManager.requestExternalWritePermissions(this, HiddenBackupConstants.REQUEST_WRITE_STORAGE);
+                }
+
+                break;
+            }
+        }
     }
 
     public void initFragment() {
