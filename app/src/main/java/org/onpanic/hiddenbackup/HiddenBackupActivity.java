@@ -28,18 +28,14 @@ import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
 import org.onpanic.hiddenbackup.fragments.AppSetup;
 import org.onpanic.hiddenbackup.fragments.BackupNow;
 import org.onpanic.hiddenbackup.fragments.DirsFragment;
-import org.onpanic.hiddenbackup.fragments.FileManagerFragment;
 import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
 import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
 import org.onpanic.hiddenbackup.helpers.CheckDependenciesHelper;
 import org.onpanic.hiddenbackup.permissions.PermissionManager;
 
-import java.util.ArrayList;
-
 public class HiddenBackupActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         DirsFragment.OnDirClickListener,
-        FileManagerFragment.OnSavePaths,
         AppSetup.OnScanQRCallback {
 
     private DrawerLayout drawer;
@@ -200,11 +196,6 @@ public class HiddenBackupActivity extends AppCompatActivity implements
 
     @Override
     public void onDirClick(int id) {
-
-    }
-
-    @Override
-    public void save(ArrayList<String> files) {
 
     }
 

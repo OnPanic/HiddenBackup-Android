@@ -4,8 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,14 +16,12 @@ public class FMItemsAdapter extends RecyclerView.Adapter<FMItemsAdapter.ViewHold
     private File[] dirContent;
 
     private ArrayList<File> prevDir;
-    private ArrayList<String> selectedFiles;
     private File currentDir;
 
     public FMItemsAdapter(File current) {
         currentDir = current;
         dirContent = currentDir.listFiles();
         prevDir = new ArrayList<>();
-        selectedFiles = new ArrayList<>();
     }
 
     @Override
@@ -49,20 +45,6 @@ public class FMItemsAdapter extends RecyclerView.Adapter<FMItemsAdapter.ViewHold
                     currentDir = current;
                     dirContent = current.listFiles();
                     notifyDataSetChanged();
-                } else {
-                    holder.selected.toggle();
-                }
-            }
-        });
-
-        holder.selected.setChecked(selectedFiles.lastIndexOf(current.getAbsolutePath()) != -1);
-        holder.selected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    selectedFiles.add(current.getAbsolutePath());
-                } else {
-                    selectedFiles.remove(selectedFiles.lastIndexOf(current.getAbsolutePath()));
                 }
             }
         });
@@ -82,22 +64,16 @@ public class FMItemsAdapter extends RecyclerView.Adapter<FMItemsAdapter.ViewHold
         }
     }
 
-    public ArrayList<String> getSelectedFiles() {
-        return selectedFiles;
-    }
-
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        public final CheckBox selected;
-        public final ImageView type;
+        public final ImageView add;
         public final TextView name;
         public File file;
 
         ViewHolder(final View row) {
             super(row);
-            type = (ImageView) row.findViewById(R.id.fm_item_type);
+            add = (ImageView) row.findViewById(R.id.fm_item_add);
             name = (TextView) row.findViewById(R.id.fm_item_name);
-            selected = (CheckBox) row.findViewById(R.id.fm_item_selected);
         }
     }
 }
