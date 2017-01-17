@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import java.util.List;
 
 public class BarcodeScannerHelper {
-    private static boolean isAppInstalled(Context context, String uri) {
+    private static boolean isAppInstalled(Context context) {
         try {
             PackageManager p = context.getPackageManager();
             p.getPackageInfo("com.google.zxing.client.android", PackageManager.GET_ACTIVITIES);
@@ -44,7 +44,7 @@ public class BarcodeScannerHelper {
         return intent;
     }
 
-    public static Intent getScanIntent(Context context) {
+    public static Intent getScanIntent() {
         Intent intent = new Intent("com.google.zxing.client.android.SCAN");
         intent.putExtra("SCAN_MODE", "QR_CODE_MODE"); // "PRODUCT_MODE for bar codes
         return intent;
