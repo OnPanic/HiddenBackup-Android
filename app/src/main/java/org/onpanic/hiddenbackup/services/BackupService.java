@@ -2,11 +2,12 @@ package org.onpanic.hiddenbackup.services;
 
 import android.app.Service;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 
+import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
 import org.onpanic.hiddenbackup.providers.DirsProvider;
 
 import java.io.File;
@@ -20,7 +21,15 @@ public class BackupService extends Service {
             DirsProvider.Dir.ENABLED
     };
 
+    private LocalBroadcastManager broadcaster;
+
     public BackupService() {
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        broadcaster = LocalBroadcastManager.getInstance(this);
     }
 
     @Override
@@ -30,28 +39,29 @@ public class BackupService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId) {
-        Context mContext = getApplicationContext();
         ContentResolver cr = getContentResolver();
 
-        OrbotHelper.requestStartTor(mContext);
+        if (OrbotHelper.requestStartTor(this)) {
+            Cursor files = cr.query(DirsProvider.CONTENT_URI, mProjection, DirsProvider.Dir.ENABLED + "=1", null, null);
 
-        Cursor files = cr.query(DirsProvider.CONTENT_URI, mProjection, DirsProvider.Dir.ENABLED + "=1", null, null);
+            if (files != null) {
+                while (files.moveToNext()) {
+                    File current = new File(files.getString(files.getColumnIndex(DirsProvider.Dir.PATH)));
 
-        if (files != null) {
-            while (files.moveToNext()) {
-                File current = new File(files.getString(files.getColumnIndex(DirsProvider.Dir.PATH)));
-
-                if (current.exists()) {
-                    // TODO
-                } else {
-                    cr.delete(DirsProvider.CONTENT_URI,
-                            DirsProvider.Dir._ID + "=" + files.getInt(files.getColumnIndex(DirsProvider.Dir._ID)),
-                            null);
+                    if (current.exists()) {
+                        // TODO
+                    } else {
+                        cr.delete(DirsProvider.CONTENT_URI,
+                                DirsProvider.Dir._ID + "=" + files.getInt(files.getColumnIndex(DirsProvider.Dir._ID)),
+                                null);
+                    }
                 }
-            }
 
-            files.close();
+                files.close();
+            }
         }
+
+        broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_FINISH));
 
         stopSelf(startId);
 

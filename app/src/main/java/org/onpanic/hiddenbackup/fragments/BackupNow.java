@@ -2,9 +2,12 @@ package org.onpanic.hiddenbackup.fragments;
 
 
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.onpanic.hiddenbackup.R;
+import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
 import org.onpanic.hiddenbackup.services.BackupService;
 
 public class BackupNow extends Fragment {
-    private ImageView image;
     private Context mContext;
-    private Animation animation;
+    private BroadcastReceiver receiver;
+    private LocalBroadcastManager localBroadcastManager;
 
     public BackupNow() {
         // Required empty public constructor
@@ -28,21 +32,35 @@ public class BackupNow extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_big_action_button, container, false);
-        image = (ImageView) v.findViewById(R.id.big_action_button);
+
+        final TextView text = (TextView) v.findViewById(R.id.big_action_button_summary);
+        text.setText(mContext.getString(R.string.run_backup));
+
+        ImageView image = (ImageView) v.findViewById(R.id.big_action_button);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                animation = AnimationUtils.loadAnimation(mContext, R.anim.clockwise);
-                image.startAnimation(animation);
+                Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.clockwise);
+                view.startAnimation(animation);
                 Intent intent = new Intent(mContext, BackupService.class);
                 mContext.startService(intent);
+                text.setText(mContext.getString(R.string.backup_is_running));
             }
         });
 
-        TextView text = (TextView) v.findViewById(R.id.big_action_button_summary);
-        text.setText(mContext.getString(R.string.run_backup));
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                text.setText(mContext.getString(R.string.run_backup));
+            }
+        };
+
+        localBroadcastManager.registerReceiver(
+                receiver, new IntentFilter(HiddenBackupConstants.BACKUP_FINISH));
+
         return v;
     }
 
@@ -50,5 +68,12 @@ public class BackupNow extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        localBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        localBroadcastManager.unregisterReceiver(receiver);
     }
 }
