@@ -13,20 +13,15 @@
     <string name="runned_notification_content">Your files are safe</string>
     <string name="runned_notification_title">Backup send</string>
     <string name="install_orbot">Install Orbot</string>
-    <string name="orbot_is_not_installed">Orbot is not installed</string>
-    <string name="install">Install</string>
     <string name="scan_server_qr">Scan server QR</string>
-    <string name="scan_qr">Scan QR</string>
     <string name="forgot_server">Forgot server</string>
     <string name="forgot_server_summary">Forgot server configuration when a panic action is triggered</string>
-    <string name="server_is_not_set">Server is not set</string>
     <string name="runned_notification">Notify backup</string>
     <string name="runned_notification_summary">Shows a notification after a backup completes</string>
     <string name="panic_category">On Panic Settings</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="install_barcode">Install Barcode Scanner</string>
-    <string name="barcode_is_not_installed">Barcode Scanner is not installed</string>
+    <string name="install_barcode">Install Qr Scanner</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>
     <string name="pref_trigger_app" translatable="false">pref_trigger_app</string>

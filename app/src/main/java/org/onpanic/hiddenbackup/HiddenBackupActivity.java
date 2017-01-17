@@ -21,6 +21,7 @@ import org.onpanic.hiddenbackup.fragments.DirsFragment;
 import org.onpanic.hiddenbackup.fragments.FileManagerFragment;
 import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
 import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
+import org.onpanic.hiddenbackup.helpers.CheckDependenciesHelper;
 
 import java.util.ArrayList;
 
@@ -33,9 +34,6 @@ public class HiddenBackupActivity extends AppCompatActivity implements
 
     private DrawerLayout drawer;
     private FragmentManager mFragmentManager;
-    private boolean isOrbotInstalled;
-    private boolean isBarcodeInstalled;
-    private boolean hasServerConf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,28 +53,13 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        hasServerConf = (preferences.getString(getString(R.string.pref_server_onion), null) != null);
-        isOrbotInstalled = OrbotHelper.isOrbotInstalled(this);
-        isBarcodeInstalled = BarcodeScannerHelper.isAppInstalled(this);
-
         // Do not overlapping fragments.
         if (savedInstanceState != null) return;
 
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
 
-        if (!isOrbotInstalled) {
-            AppSetup setup = new AppSetup();
-            setup.orbotSetup();
-            transaction.replace(R.id.fragment_container, setup);
-        } else if (!isBarcodeInstalled) {
-            AppSetup setup = new AppSetup();
-            setup.barcodeSetup();
-            transaction.replace(R.id.fragment_container, setup);
-        } else if (!hasServerConf) {
-            AppSetup setup = new AppSetup();
-            setup.serverSetup();
-            transaction.replace(R.id.fragment_container, setup);
+        if (!CheckDependenciesHelper.checkAll(this)) {
+            transaction.replace(R.id.fragment_container, new AppSetup());
         } else {
             transaction.replace(R.id.fragment_container, new BackupNow());
         }
@@ -108,18 +91,8 @@ public class HiddenBackupActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
 
-        if (!isOrbotInstalled) {
-            AppSetup setup = new AppSetup();
-            setup.orbotSetup();
-            transaction.replace(R.id.fragment_container, setup);
-        } else if (!isBarcodeInstalled) {
-            AppSetup setup = new AppSetup();
-            setup.barcodeSetup();
-            transaction.replace(R.id.fragment_container, setup);
-        } else if (!hasServerConf) {
-            AppSetup setup = new AppSetup();
-            setup.serverSetup();
-            transaction.replace(R.id.fragment_container, setup);
+        if (!CheckDependenciesHelper.checkAll(this)) {
+            transaction.replace(R.id.fragment_container, new AppSetup());
         } else {
             switch (item.getItemId()) {
                 case R.id.run_backup_now:

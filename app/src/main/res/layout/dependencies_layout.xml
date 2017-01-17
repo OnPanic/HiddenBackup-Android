@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/big_action_button_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/dependencies_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        app:srcCompat="@drawable/backup_min"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="@string/install_orbot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/install_orbot_dependency"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/dependencies_image"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        style="@style/Widget.AppCompat.Button.Borderless" />
+
+    <Button
+        android:text="@string/install_barcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/install_barcode_dependency"
+        android:layout_below="@+id/install_orbot_dependency"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="@string/scan_server_qr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/read_qr_dependency"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_below="@+id/install_barcode_dependency"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
