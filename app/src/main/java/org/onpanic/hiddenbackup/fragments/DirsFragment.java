@@ -31,6 +31,7 @@ public class DirsFragment extends Fragment {
             DirsProvider.Dir.PATH,
             DirsProvider.Dir.ENABLED
     };
+
     public DirsFragment() {
         // Required empty public constructor
     }
