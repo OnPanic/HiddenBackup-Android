@@ -6,7 +6,7 @@
         android:key="@string/pref_scheduler_enabled"
         android:title="@string/enabled" />
 
-    <Preference
+    <org.onpanic.hiddenbackup.ui.TimePreference
         android:key="@string/pref_scheduler_time"
         android:title="@string/run_scheduler_at" />
 
