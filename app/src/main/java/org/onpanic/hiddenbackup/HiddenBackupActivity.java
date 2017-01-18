@@ -126,6 +126,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         if (resumeAfterQRScan) {
+            resumeAfterQRScan = false;
             initFragment();
         }
     }
