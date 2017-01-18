@@ -220,5 +220,6 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         arguments.putString(DirsProvider.Dir.PATH, path);
         dialog.setArguments(arguments);
         dialog.show(getSupportFragmentManager(), "SaveDirDialog");
+        mFragmentManager.popBackStack();
     }
 }
