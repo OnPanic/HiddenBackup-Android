@@ -115,6 +115,8 @@ public class DirsProvider extends ContentProvider {
 
         public static final String ENABLED = "enabled";
         public static final String PATH = "path";
+        public static final String SCHEDULED = "scheduled";
+        public static final String OBSERVER = "observer";
 
         private Dir() {
         }
