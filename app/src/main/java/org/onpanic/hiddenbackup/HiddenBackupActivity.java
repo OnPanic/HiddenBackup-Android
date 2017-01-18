@@ -32,6 +32,7 @@ import org.onpanic.hiddenbackup.fragments.AppSetup;
 import org.onpanic.hiddenbackup.fragments.BackupNow;
 import org.onpanic.hiddenbackup.fragments.DirsFragment;
 import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
+import org.onpanic.hiddenbackup.fragments.SetScheduler;
 import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
 import org.onpanic.hiddenbackup.helpers.CheckDependenciesHelper;
 import org.onpanic.hiddenbackup.permissions.PermissionManager;
@@ -110,7 +111,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
                     transaction.replace(R.id.fragment_container, new DirsFragment());
                     break;
                 case R.id.scheduled:
-                    // TODO
+                    transaction.replace(R.id.fragment_container, new SetScheduler());
                     break;
             }
         }

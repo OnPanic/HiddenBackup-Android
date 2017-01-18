@@ -23,6 +23,8 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="grant">Grant</string>
+    <string name="enabled">Enabled</string>
+    <string name="wait_for_wifi">Wait for Wifi connection</string>
     <string name="confirm_dir_deletion">Confirm deletion</string>
     <string name="install_barcode">Install Qr Scanner</string>
     <string name="cookie_to_clipboard">Auth cookie copied to clipboard</string>
@@ -31,6 +33,7 @@
     <string name="save_dir_backup">Setup</string>
     <string name="set_file_observer">Backup news files when created</string>
     <string name="set_for_schedule">Backup news files at next schedule</string>
+    <string name="run_scheduler_at">Run at</string>
     <string name="please_grant_permissions_for_external_storage">Please grant permissions for external storage</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>
@@ -40,4 +43,7 @@
     <string name="pref_runned_notification" translatable="false">pref_runned_notification</string>
     <string name="pref_forgot_server" translatable="false">pref_forgot_server</string>
     <string name="pref_run_now" translatable="false">pref_run_now</string>
+    <string name="pref_wait_for_wifi" translatable="false">pref_wait_for_wifi</string>
+    <string name="pref_scheduler_enabled" translatable="false">pref_scheduler_enabled</string>
+    <string name="pref_scheduler_time" translatable="false">pref_scheduler_time</string>
 </resources>
