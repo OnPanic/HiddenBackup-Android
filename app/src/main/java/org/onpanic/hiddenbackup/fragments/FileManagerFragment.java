@@ -67,11 +67,7 @@ public class FileManagerFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        adapter = new FMItemsAdapter(
-                getExternalStorageDirectory(),
-                context.getContentResolver(),
-                getActivity().getFragmentManager()
-        );
+        adapter = new FMItemsAdapter(getExternalStorageDirectory(), context);
     }
 
     @Override

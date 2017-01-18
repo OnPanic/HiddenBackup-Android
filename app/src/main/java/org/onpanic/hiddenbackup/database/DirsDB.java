@@ -15,6 +15,8 @@ public class DirsDB extends SQLiteOpenHelper {
             "CREATE TABLE " + DIRS_TABLE_NAME + " (" +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "enabled INTEGER DEFAULT 1, " +
+                    "observer INTEGER DEFAULT 0, " +
+                    "scheduled INTEGER DEFAULT 0, " +
                     "path TEXT );";
 
     public DirsDB(Context context) {

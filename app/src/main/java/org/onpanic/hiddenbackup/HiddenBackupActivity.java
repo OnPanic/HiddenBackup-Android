@@ -24,7 +24,10 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.onpanic.hiddenbackup.adapters.FMItemsAdapter;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
+import org.onpanic.hiddenbackup.dialogs.DeleteDirDialog;
+import org.onpanic.hiddenbackup.dialogs.SaveDirDialog;
 import org.onpanic.hiddenbackup.fragments.AppSetup;
 import org.onpanic.hiddenbackup.fragments.BackupNow;
 import org.onpanic.hiddenbackup.fragments.DirsFragment;
@@ -32,11 +35,13 @@ import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
 import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
 import org.onpanic.hiddenbackup.helpers.CheckDependenciesHelper;
 import org.onpanic.hiddenbackup.permissions.PermissionManager;
+import org.onpanic.hiddenbackup.providers.DirsProvider;
 
 public class HiddenBackupActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         DirsFragment.OnDirClickListener,
-        AppSetup.OnScanQRCallback {
+        AppSetup.OnScanQRCallback,
+        FMItemsAdapter.OnSetDirBackup {
 
     private DrawerLayout drawer;
     private FragmentManager mFragmentManager;
@@ -121,6 +126,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         if (resumeAfterQRScan) {
+            resumeAfterQRScan = false;
             initFragment();
         }
     }
@@ -196,11 +202,25 @@ public class HiddenBackupActivity extends AppCompatActivity implements
 
     @Override
     public void onDirClick(int id) {
-
+        DeleteDirDialog dialog = new DeleteDirDialog();
+        Bundle arguments = new Bundle();
+        arguments.putInt(DirsProvider.Dir._ID, id);
+        dialog.setArguments(arguments);
+        dialog.show(getSupportFragmentManager(), "DeleteDirDialog");
     }
 
     @Override
     public void onScanQR() {
         startActivityForResult(BarcodeScannerHelper.getScanIntent(), HiddenBackupConstants.SCAN_RESULT);
+    }
+
+    @Override
+    public void setDirBackup(String path) {
+        SaveDirDialog dialog = new SaveDirDialog();
+        Bundle arguments = new Bundle();
+        arguments.putString(DirsProvider.Dir.PATH, path);
+        dialog.setArguments(arguments);
+        dialog.show(getSupportFragmentManager(), "SaveDirDialog");
+        mFragmentManager.popBackStack();
     }
 }

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.adapters.DirsAdapter;
 import org.onpanic.hiddenbackup.providers.DirsProvider;
+import org.onpanic.hiddenbackup.ui.SimpleDividerItemDecoration;
 
 public class DirsFragment extends Fragment {
     private ContentResolver mContentResolver;
@@ -29,7 +30,9 @@ public class DirsFragment extends Fragment {
     private String[] mProjection = new String[]{
             DirsProvider.Dir._ID,
             DirsProvider.Dir.PATH,
-            DirsProvider.Dir.ENABLED
+            DirsProvider.Dir.ENABLED,
+            DirsProvider.Dir.OBSERVER,
+            DirsProvider.Dir.SCHEDULED
     };
 
     public DirsFragment() {
@@ -64,6 +67,8 @@ public class DirsFragment extends Fragment {
 
         RecyclerView list = (RecyclerView) view.findViewById(R.id.dirs_list);
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        list.addItemDecoration(new SimpleDividerItemDecoration(mContext));
+        list.setHasFixedSize(true); // does not change, except in onResume()
         list.setAdapter(adapter);
 
         return view;
