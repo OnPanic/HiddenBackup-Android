@@ -2,7 +2,6 @@ package org.onpanic.hiddenbackup.fragments;
 
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import org.onpanic.hiddenbackup.R;
 
 public class SetFolderBackup extends Fragment {
     private String mPath;
-    private FragmentManager mManager;
 
     public SetFolderBackup() {
         // Required empty public constructor
@@ -26,8 +24,7 @@ public class SetFolderBackup extends Fragment {
         return inflater.inflate(R.layout.fragment_set_folder_backup, container, false);
     }
 
-    public void setUp(String path, FragmentManager manager) {
+    public void setUp(String path) {
         mPath = path;
-        mManager = manager;
     }
 }
