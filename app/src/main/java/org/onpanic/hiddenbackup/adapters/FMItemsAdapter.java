@@ -1,5 +1,6 @@
 package org.onpanic.hiddenbackup.adapters;
 
+import android.app.FragmentManager;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.graphics.ColorMatrix;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.onpanic.hiddenbackup.R;
+import org.onpanic.hiddenbackup.fragments.SetFolderBackup;
 import org.onpanic.hiddenbackup.providers.DirsProvider;
 
 import java.io.File;
@@ -23,15 +25,17 @@ public class FMItemsAdapter extends RecyclerView.Adapter<FMItemsAdapter.ViewHold
     private ArrayList<File> prevDir;
     private File currentDir;
     private ContentResolver mResolver;
+    private FragmentManager mManager;
 
     private String[] mProjection = new String[]{
             DirsProvider.Dir._ID,
             DirsProvider.Dir.PATH
     };
 
-    public FMItemsAdapter(File current, ContentResolver contentResolver) {
+    public FMItemsAdapter(File current, ContentResolver contentResolver, FragmentManager fragmentManager) {
         currentDir = current;
         mResolver = contentResolver;
+        mManager = fragmentManager;
         dirContent = currentDir.listFiles();
         prevDir = new ArrayList<>();
     }
@@ -54,20 +58,26 @@ public class FMItemsAdapter extends RecyclerView.Adapter<FMItemsAdapter.ViewHold
             Cursor c = mResolver.query(
                     DirsProvider.CONTENT_URI, mProjection, where, null, null);
 
-            if (c != null && c.getCount() > 0) {
+            if (c == null || c.getCount() < 1) {
                 ColorMatrix matrix = new ColorMatrix();
                 matrix.setSaturation(0);
                 ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
                 holder.add.setColorFilter(filter);
-                c.close();
-            } else {
+
                 holder.add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // TODO
+                        SetFolderBackup folderBackup = new SetFolderBackup();
+                        folderBackup.setUp(current.getAbsolutePath(), mManager);
+                        mManager.beginTransaction()
+                                .addToBackStack(null)
+                                .replace(R.id.fragment_container, folderBackup)
+                                .commit();
                     }
                 });
             }
+
+            if (c != null) c.close();
 
             holder.name.setOnClickListener(new View.OnClickListener() {
                 @Override
