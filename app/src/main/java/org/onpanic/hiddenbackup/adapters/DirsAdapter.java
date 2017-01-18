@@ -44,6 +44,12 @@ public class DirsAdapter extends CursorRecyclerViewAdapter<DirsAdapter.ViewHolde
         final String file_name = cursor.getString(cursor.getColumnIndex(DirsProvider.Dir.PATH));
         final Boolean active = (cursor.getInt(cursor.getColumnIndex(DirsProvider.Dir.ENABLED)) == 1);
 
+        if ((cursor.getInt(cursor.getColumnIndex(DirsProvider.Dir.SCHEDULED)) == 1)) {
+            viewHolder.mImage.setImageResource(R.drawable.ic_scheduled_dir);
+        } else {
+            viewHolder.mImage.setImageResource(R.drawable.ic_new_file_created);
+        }
+
         viewHolder.mActive.setChecked(active);
         viewHolder.mActive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

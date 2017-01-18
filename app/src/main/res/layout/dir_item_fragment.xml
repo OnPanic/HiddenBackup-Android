@@ -7,9 +7,9 @@
 
     <ImageView
         android:id="@+id/contact_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher" />
+        android:layout_width="@android:dimen/app_icon_size"
+        android:layout_height="@android:dimen/app_icon_size"
+        app:srcCompat="@drawable/ic_new_file_created" />
 
     <TextView
         android:id="@+id/contact_name"

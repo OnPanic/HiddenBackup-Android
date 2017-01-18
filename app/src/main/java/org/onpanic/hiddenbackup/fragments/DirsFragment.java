@@ -29,7 +29,9 @@ public class DirsFragment extends Fragment {
     private String[] mProjection = new String[]{
             DirsProvider.Dir._ID,
             DirsProvider.Dir.PATH,
-            DirsProvider.Dir.ENABLED
+            DirsProvider.Dir.ENABLED,
+            DirsProvider.Dir.OBSERVER,
+            DirsProvider.Dir.SCHEDULED
     };
 
     public DirsFragment() {
