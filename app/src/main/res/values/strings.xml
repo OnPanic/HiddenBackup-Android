@@ -34,6 +34,7 @@
     <string name="set_file_observer">Backup news files when created</string>
     <string name="set_for_schedule">Backup news files at next schedule</string>
     <string name="run_scheduler_at">Run at</string>
+    <string name="next_backup_at">Next backup at</string>
     <string name="please_grant_permissions_for_external_storage">Please grant permissions for external storage</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>

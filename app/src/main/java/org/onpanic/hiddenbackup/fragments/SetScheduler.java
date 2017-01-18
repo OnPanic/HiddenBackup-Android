@@ -5,7 +5,6 @@ import android.preference.PreferenceFragment;
 
 import org.onpanic.hiddenbackup.R;
 
-
 public class SetScheduler extends PreferenceFragment {
 
     public SetScheduler() {
