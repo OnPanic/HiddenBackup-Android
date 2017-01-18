@@ -44,9 +44,9 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         AppSetup.OnScanQRCallback,
         FMItemsAdapter.OnSetDirBackup {
 
+    private static boolean resumeAfterQRScan = false;
     private DrawerLayout drawer;
     private FragmentManager mFragmentManager;
-    private boolean resumeAfterQRScan = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
