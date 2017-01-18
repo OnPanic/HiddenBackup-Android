@@ -52,6 +52,10 @@
             android:name=".services.BackupService"
             android:enabled="true"
             android:exported="false" />
+        <service
+            android:name=".services.SchedulerService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>
