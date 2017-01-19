@@ -77,8 +77,7 @@ public class FileObserverService extends Service {
                         FileObserver observer = new FileObserver(current.getAbsolutePath()) {
                             @Override
                             public void onEvent(int event, String file) {
-                                // check if its a "create" and not equal to .probe because thats created every time camera is launched
-                                if (event == FileObserver.CREATE && !file.equals(".probe")) {
+                                if (event == FileObserver.CREATE) {
                                     Intent backup = new Intent(getApplicationContext(), BackupService.class);
                                     backup.setAction(HiddenBackupConstants.FILE_BACKUP);
                                     backup.putExtra(DirsProvider.Dir.PATH, file);
