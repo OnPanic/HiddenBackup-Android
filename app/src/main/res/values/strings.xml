@@ -47,4 +47,5 @@
     <string name="pref_wait_for_wifi" translatable="false">pref_wait_for_wifi</string>
     <string name="pref_scheduler_enabled" translatable="false">pref_scheduler_enabled</string>
     <string name="pref_scheduler_time" translatable="false">pref_scheduler_time</string>
+    <string name="pref_scheduler_rand" translatable="false">pref_scheduler_rand</string>
 </resources>
