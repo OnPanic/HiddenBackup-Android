@@ -50,7 +50,8 @@ public class BackupService extends IntentService {
                 DirsProvider.Dir.ENABLED
         };
 
-        Cursor files = cr.query(DirsProvider.CONTENT_URI, mProjection, DirsProvider.Dir.ENABLED + "=1", null, null);
+        String where = DirsProvider.Dir.ENABLED + "=1 AND " + DirsProvider.Dir.SCHEDULED + "=1";
+        Cursor files = cr.query(DirsProvider.CONTENT_URI, mProjection, where, null, null);
 
         if (files != null) {
             while (files.moveToNext()) {
