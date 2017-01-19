@@ -8,11 +8,18 @@ import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.adapters.DirsAdapter;
@@ -35,8 +42,16 @@ public class DirsFragment extends Fragment {
             DirsProvider.Dir.SCHEDULED
     };
 
+    private String mWhere = null;
+
     public DirsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -59,7 +74,7 @@ public class DirsFragment extends Fragment {
         adapter = new DirsAdapter(
                 mContext,
                 mContentResolver.query(
-                        DirsProvider.CONTENT_URI, mProjection, null, null, null
+                        DirsProvider.CONTENT_URI, mProjection, mWhere, null, null
                 ),
                 mListener);
 
@@ -96,6 +111,47 @@ public class DirsFragment extends Fragment {
         mContentResolver.unregisterContentObserver(observer);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.dirs_navigation, menu);
+        MenuItem item = menu.findItem(R.id.dir_type);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+
+        ArrayAdapter<CharSequence> items = ArrayAdapter.createFromResource(
+                mContext, R.array.array_dir_types, android.R.layout.simple_spinner_item);
+
+        items.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(items);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View v, int pos, long id) {
+                switch (pos) {
+                    case 0:
+                        mWhere = null;
+                        break;
+                    case 1:
+                        mWhere = DirsProvider.Dir.SCHEDULED + "=1";
+                        break;
+                    case 2:
+                        mWhere = DirsProvider.Dir.OBSERVER + "=1";
+                        break;
+                }
+
+                adapter.changeCursor(mContentResolver.query(
+                        DirsProvider.CONTENT_URI, mProjection, mWhere, null, null
+                ));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // Do nothing
+            }
+        });
+    }
+
     public interface OnDirClickListener {
         void onDirClick(int id);
     }
@@ -109,9 +165,8 @@ public class DirsFragment extends Fragment {
         public void onChange(boolean selfChange) {
             // New data
             adapter.changeCursor(mContentResolver.query(
-                    DirsProvider.CONTENT_URI, mProjection, null, null, null
+                    DirsProvider.CONTENT_URI, mProjection, mWhere, null, null
             ));
         }
-
     }
 }
