@@ -80,7 +80,7 @@ public class SchedulerService extends Service {
 
         } else if (action.equals(preferences.getString(getString(R.string.pref_scheduler_rand), UUID.randomUUID().toString()))) {
             SharedPreferences.Editor edit = preferences.edit();
-            edit.putString(getString(R.string.pref_scheduler_rand), null);
+            edit.putString(getString(R.string.pref_scheduler_rand), UUID.randomUUID().toString());
             edit.apply();
 
             startService(new Intent(this, BackupService.class));
