@@ -47,6 +47,7 @@ public class BackupService extends IntentService {
         String[] mProjection = new String[]{
                 DirsProvider.Dir._ID,
                 DirsProvider.Dir.PATH,
+                DirsProvider.Dir.SCHEDULED,
                 DirsProvider.Dir.ENABLED
         };
 

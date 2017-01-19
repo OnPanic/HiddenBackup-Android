@@ -56,7 +56,10 @@
             android:name=".services.SchedulerService"
             android:enabled="true"
             android:exported="false" />
-
+        <service
+            android:name=".services.FileObserverService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>
