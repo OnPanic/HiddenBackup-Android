@@ -88,7 +88,6 @@ public class HiddenBackupActivity extends AppCompatActivity implements
 
         if (id == R.id.action_settings) {
             mFragmentManager.beginTransaction()
-                    .addToBackStack(null)
                     .replace(R.id.fragment_container, new HiddenBackupSettings())
                     .commit();
         }
