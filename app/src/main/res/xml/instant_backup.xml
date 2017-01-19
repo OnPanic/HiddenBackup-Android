@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pref_instant_backup_enabled"
+        android:summary="@string/enable_instant_backup_summary"
+        android:title="@string/enable_instant_backup" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:dependency="@string/pref_instant_backup_enabled"
+        android:key="@string/pref_instant_backup_gprs_enabled"
+        android:summary="@string/instant_backup_gprs_summary"
+        android:title="@string/instant_backup_gprs" />
+</PreferenceScreen>

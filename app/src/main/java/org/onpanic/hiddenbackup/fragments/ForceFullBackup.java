@@ -16,10 +16,10 @@ import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
 import org.onpanic.hiddenbackup.services.BackupService;
 
-public class BackupNow extends Fragment {
+public class ForceFullBackup extends Fragment {
     private Context mContext;
 
-    public BackupNow() {
+    public ForceFullBackup() {
         // Required empty public constructor
     }
 

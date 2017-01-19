@@ -32,6 +32,7 @@ import org.onpanic.hiddenbackup.fragments.AppSetup;
 import org.onpanic.hiddenbackup.fragments.DirsFragment;
 import org.onpanic.hiddenbackup.fragments.FullBackup;
 import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
+import org.onpanic.hiddenbackup.fragments.InstantBackup;
 import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
 import org.onpanic.hiddenbackup.helpers.CheckDependenciesHelper;
 import org.onpanic.hiddenbackup.permissions.PermissionManager;
@@ -107,7 +108,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
                     transaction.replace(R.id.fragment_container, new FullBackup());
                     break;
                 case R.id.instant_backup:
-                    // transaction.replace(R.id.fragment_container, new BackupNow());
+                    transaction.replace(R.id.fragment_container, new InstantBackup());
                     break;
                 case R.id.add_backup_dirs:
                     transaction.replace(R.id.fragment_container, new DirsFragment());
