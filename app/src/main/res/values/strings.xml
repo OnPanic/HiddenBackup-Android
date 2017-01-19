@@ -6,7 +6,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="scheduled_backups">Scheduled backups</string>
     <string name="run_backup">Run full backup</string>
-    <string name="backup_done">Backup done</string>
     <string name="run_backup_summary">Backups files when a panic action is triggered</string>
     <string name="none">None</string>
     <string name="allowed_trigger_app_summary">Select which app is authorized to send panic alerts</string>
@@ -24,14 +23,13 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
     <string name="grant">Grant</string>
-    <string name="enabled">Enabled</string>
+    <string name="enable_scheduler">Enable scheduler</string>
     <string name="wait_for_wifi">Wait for Wifi connection</string>
     <string name="wait_for_wifi_summary">Postpones the backup until you have a WiFi connection</string>
     <string name="confirm_dir_deletion">Confirm deletion</string>
     <string name="install_barcode">Install Qr Scanner</string>
     <string name="cookie_to_clipboard">Auth cookie copied to clipboard</string>
     <string name="add_server_failure">Unable to read server configuration</string>
-    <string name="backup_is_running">Full backup is running</string>
     <string name="save_dir_backup">Setup</string>
     <string name="set_file_observer">Instant backup new files</string>
     <string name="set_for_schedule">Full backup at next schedule</string>

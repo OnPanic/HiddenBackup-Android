@@ -4,7 +4,7 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/pref_scheduler_enabled"
-        android:title="@string/enabled" />
+        android:title="@string/enable_scheduler" />
 
     <org.onpanic.hiddenbackup.ui.TimePreference
         android:defaultValue="00:00"

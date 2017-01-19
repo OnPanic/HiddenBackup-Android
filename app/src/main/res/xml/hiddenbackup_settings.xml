@@ -18,11 +18,13 @@
             android:persistent="false"
             android:summary="@string/allowed_trigger_app_summary"
             android:title="@string/allowed_trigger_app" />
+
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_run_now"
             android:summary="@string/run_backup_summary"
             android:title="@string/run_backup" />
+
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_forgot_server"
