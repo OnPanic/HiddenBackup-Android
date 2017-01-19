@@ -16,7 +16,6 @@ import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
 
 import java.util.Calendar;
-import java.util.UUID;
 
 public class SchedulerService extends Service {
     private LocalBroadcastManager localBroadcastManager;
@@ -46,14 +45,9 @@ public class SchedulerService extends Service {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (action.equals(HiddenBackupConstants.ACTION_START_SCHEDULER)) {
-            // Rand action for extra securety
-            String rand = UUID.randomUUID().toString();
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putString(getString(R.string.pref_scheduler_rand), rand);
-            edit.apply();
 
             Intent service = new Intent(this, SchedulerService.class);
-            service.setAction(rand);
+            service.setAction(HiddenBackupConstants.FULL_BACKUP);
             alarmIntent = PendingIntent.getBroadcast(this, 0, service, 0);
 
             String[] time = preferences.getString(getString(R.string.pref_scheduler_time), "00:00").split(":");
@@ -78,12 +72,10 @@ public class SchedulerService extends Service {
             localBroadcastManager.registerReceiver(
                     stopReceiver, new IntentFilter(HiddenBackupConstants.ACTION_STOP_SCHEDULER));
 
-        } else if (action.equals(preferences.getString(getString(R.string.pref_scheduler_rand), UUID.randomUUID().toString()))) {
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putString(getString(R.string.pref_scheduler_rand), UUID.randomUUID().toString());
-            edit.apply();
-
-            startService(new Intent(this, BackupService.class));
+        } else if (action.equals(HiddenBackupConstants.SCHEDULED_BACKUP)) {
+            Intent backup = new Intent(this, BackupService.class);
+            backup.setAction(HiddenBackupConstants.FULL_BACKUP);
+            startService(backup);
         }
 
         return Service.START_STICKY;

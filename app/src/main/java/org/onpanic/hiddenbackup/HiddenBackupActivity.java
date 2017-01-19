@@ -181,7 +181,8 @@ public class HiddenBackupActivity extends AppCompatActivity implements
             case HiddenBackupConstants.REQUEST_WRITE_STORAGE: {
                 if (grantResults.length < 1 || grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     // Request rationale
-                    PermissionManager.requestExternalWritePermissions(this, HiddenBackupConstants.REQUEST_WRITE_STORAGE);
+                    PermissionManager.requestExternalWritePermissions(
+                            this, HiddenBackupConstants.REQUEST_WRITE_STORAGE);
                 }
 
                 break;

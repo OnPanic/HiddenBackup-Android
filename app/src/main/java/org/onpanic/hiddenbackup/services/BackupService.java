@@ -1,10 +1,9 @@
 package org.onpanic.hiddenbackup.services;
 
-import android.app.Service;
+import android.app.IntentService;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
@@ -14,34 +13,41 @@ import java.io.File;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 
-public class BackupService extends Service {
-    private String[] mProjection = new String[]{
-            DirsProvider.Dir._ID,
-            DirsProvider.Dir.PATH,
-            DirsProvider.Dir.ENABLED
-    };
-
-    private LocalBroadcastManager broadcaster;
+public class BackupService extends IntentService {
 
     public BackupService() {
+        super(BackupService.class.getName());
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        broadcaster = LocalBroadcastManager.getInstance(this);
+    protected void onHandleIntent(Intent intent) {
+        if (intent != null) {
+            final String action = intent.getAction();
+
+            if (action.equals(HiddenBackupConstants.FULL_BACKUP)) {
+                fullBackup();
+            } else if (action.equals(HiddenBackupConstants.FILE_BACKUP)) {
+                String fileName = intent.getStringExtra(DirsProvider.Dir.PATH);
+                if (fileName != null) {
+                    File file = new File(fileName);
+                    if (file.exists() && !file.isDirectory()) {
+                        fileBackup(file);
+                    }
+                }
+            }
+        }
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, final int startId) {
+    private void fullBackup() {
         ContentResolver cr = getContentResolver();
 
         if (OrbotHelper.requestStartTor(this)) {
+            String[] mProjection = new String[]{
+                    DirsProvider.Dir._ID,
+                    DirsProvider.Dir.PATH,
+                    DirsProvider.Dir.ENABLED
+            };
+
             Cursor files = cr.query(DirsProvider.CONTENT_URI, mProjection, DirsProvider.Dir.ENABLED + "=1", null, null);
 
             if (files != null) {
@@ -49,7 +55,9 @@ public class BackupService extends Service {
                     File current = new File(files.getString(files.getColumnIndex(DirsProvider.Dir.PATH)));
 
                     if (current.exists()) {
-                        // TODO
+                        for (File f : current.listFiles()) {
+                            fileBackup(f);
+                        }
                     } else {
                         cr.delete(DirsProvider.CONTENT_URI,
                                 DirsProvider.Dir._ID + "=" + files.getInt(files.getColumnIndex(DirsProvider.Dir._ID)),
@@ -58,13 +66,14 @@ public class BackupService extends Service {
                 }
 
                 files.close();
+
+                LocalBroadcastManager broadcaster = LocalBroadcastManager.getInstance(this);
+                broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_FINISH));
             }
         }
+    }
 
-        broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_FINISH));
-
-        stopSelf(startId);
-
-        return Service.START_STICKY;
+    private void fileBackup(File file) {
+        // TODO
     }
 }

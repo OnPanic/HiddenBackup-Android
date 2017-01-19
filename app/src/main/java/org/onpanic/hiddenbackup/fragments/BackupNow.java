@@ -46,6 +46,7 @@ public class BackupNow extends Fragment {
                 Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.clockwise);
                 view.startAnimation(animation);
                 Intent intent = new Intent(mContext, BackupService.class);
+                intent.setAction(HiddenBackupConstants.FULL_BACKUP);
                 mContext.startService(intent);
                 text.setText(mContext.getString(R.string.backup_is_running));
             }

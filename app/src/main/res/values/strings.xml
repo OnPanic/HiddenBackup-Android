@@ -5,7 +5,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="scheduled_backups">Scheduled backups</string>
-    <string name="run_backup">Run backup</string>
+    <string name="run_backup">Run full backup</string>
     <string name="run_backup_summary">Backups files when a panic action is triggered</string>
     <string name="none">None</string>
     <string name="allowed_trigger_app_summary">Select which app is authorized to send panic alerts</string>
@@ -29,10 +29,10 @@
     <string name="install_barcode">Install Qr Scanner</string>
     <string name="cookie_to_clipboard">Auth cookie copied to clipboard</string>
     <string name="add_server_failure">Unable to read server configuration</string>
-    <string name="backup_is_running">Backup is running</string>
+    <string name="backup_is_running">Full backup is running</string>
     <string name="save_dir_backup">Setup</string>
-    <string name="set_file_observer">Backup news files when created</string>
-    <string name="set_for_schedule">Backup news files at next schedule</string>
+    <string name="set_file_observer">Backup new files when created</string>
+    <string name="set_for_schedule">Full backup at next schedule</string>
     <string name="run_scheduler_at">Run at</string>
     <string name="next_backup_at">Next backup at</string>
     <string name="please_grant_permissions_for_external_storage">Please grant permissions for external storage</string>
@@ -47,5 +47,4 @@
     <string name="pref_wait_for_wifi" translatable="false">pref_wait_for_wifi</string>
     <string name="pref_scheduler_enabled" translatable="false">pref_scheduler_enabled</string>
     <string name="pref_scheduler_time" translatable="false">pref_scheduler_time</string>
-    <string name="pref_scheduler_rand" translatable="false">pref_scheduler_rand</string>
 </resources>
