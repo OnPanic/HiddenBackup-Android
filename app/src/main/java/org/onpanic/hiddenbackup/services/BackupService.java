@@ -19,6 +19,7 @@ import info.guardianproject.netcipher.client.StrongBuilder;
 import info.guardianproject.netcipher.client.StrongOkHttpClientBuilder;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -89,16 +90,22 @@ public class BackupService extends IntentService implements StrongBuilder.Callba
     }
 
     private void fileBackup(File file) {
-        RequestBody body = RequestBody.create(
-                MediaType.parse("multipart/form-data;"), file);
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file",
+                        file.getName(),
+                        RequestBody.create(MediaType.parse("multipart/form-data;"), file)
+                )
+                .build();
 
         Request request = new Request.Builder()
                 .url(mUrl)
-                .post(body)
+                .post(requestBody)
                 .build();
         try {
             Response response = httpClient.newCall(request).execute();
-            response.body().string();
+            // response.body().string();
         } catch (IOException e) {
             e.printStackTrace();
         }
