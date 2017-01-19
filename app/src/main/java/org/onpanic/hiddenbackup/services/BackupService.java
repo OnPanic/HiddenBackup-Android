@@ -21,7 +21,7 @@ public class BackupService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
+        if (intent != null && OrbotHelper.requestStartTor(this)) {
             final String action = intent.getAction();
 
             if (action.equals(HiddenBackupConstants.FULL_BACKUP)) {
@@ -41,35 +41,33 @@ public class BackupService extends IntentService {
     private void fullBackup() {
         ContentResolver cr = getContentResolver();
 
-        if (OrbotHelper.requestStartTor(this)) {
-            String[] mProjection = new String[]{
-                    DirsProvider.Dir._ID,
-                    DirsProvider.Dir.PATH,
-                    DirsProvider.Dir.ENABLED
-            };
+        String[] mProjection = new String[]{
+                DirsProvider.Dir._ID,
+                DirsProvider.Dir.PATH,
+                DirsProvider.Dir.ENABLED
+        };
 
-            Cursor files = cr.query(DirsProvider.CONTENT_URI, mProjection, DirsProvider.Dir.ENABLED + "=1", null, null);
+        Cursor files = cr.query(DirsProvider.CONTENT_URI, mProjection, DirsProvider.Dir.ENABLED + "=1", null, null);
 
-            if (files != null) {
-                while (files.moveToNext()) {
-                    File current = new File(files.getString(files.getColumnIndex(DirsProvider.Dir.PATH)));
+        if (files != null) {
+            while (files.moveToNext()) {
+                File current = new File(files.getString(files.getColumnIndex(DirsProvider.Dir.PATH)));
 
-                    if (current.exists()) {
-                        for (File f : current.listFiles()) {
-                            fileBackup(f);
-                        }
-                    } else {
-                        cr.delete(DirsProvider.CONTENT_URI,
-                                DirsProvider.Dir._ID + "=" + files.getInt(files.getColumnIndex(DirsProvider.Dir._ID)),
-                                null);
+                if (current.exists()) {
+                    for (File f : current.listFiles()) {
+                        fileBackup(f);
                     }
+                } else {
+                    cr.delete(DirsProvider.CONTENT_URI,
+                            DirsProvider.Dir._ID + "=" + files.getInt(files.getColumnIndex(DirsProvider.Dir._ID)),
+                            null);
                 }
-
-                files.close();
-
-                LocalBroadcastManager broadcaster = LocalBroadcastManager.getInstance(this);
-                broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_FINISH));
             }
+
+            files.close();
+
+            LocalBroadcastManager broadcaster = LocalBroadcastManager.getInstance(this);
+            broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_FINISH));
         }
     }
 
