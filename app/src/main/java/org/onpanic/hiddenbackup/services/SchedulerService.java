@@ -14,14 +14,17 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
+import org.onpanic.hiddenbackup.notifications.TriggerNotification;
 
 import java.util.Calendar;
 
 public class SchedulerService extends Service {
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver stopReceiver;
+    private BroadcastReceiver backupFinish;
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
+    private SharedPreferences preferences;
 
     public SchedulerService() {
     }
@@ -31,6 +34,7 @@ public class SchedulerService extends Service {
         super.onCreate();
         localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
         alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     @Override
@@ -41,8 +45,6 @@ public class SchedulerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId) {
         String action = intent.getAction();
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (action.equals(HiddenBackupConstants.ACTION_START_SCHEDULER)) {
 
@@ -76,6 +78,21 @@ public class SchedulerService extends Service {
             Intent backup = new Intent(this, BackupService.class);
             backup.setAction(HiddenBackupConstants.FULL_BACKUP);
             startService(backup);
+
+            backupFinish = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    localBroadcastManager.unregisterReceiver(backupFinish);
+                    if (preferences.getBoolean(getString(R.string.pref_runned_notification), false)) {
+                        TriggerNotification notification = new TriggerNotification(getApplicationContext());
+                        notification.show();
+                    }
+
+                }
+            };
+
+            localBroadcastManager.registerReceiver(
+                    backupFinish, new IntentFilter(HiddenBackupConstants.BACKUP_FINISH));
         }
 
         return Service.START_STICKY;
