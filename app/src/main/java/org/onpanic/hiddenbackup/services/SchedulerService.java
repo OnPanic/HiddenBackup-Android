@@ -75,9 +75,6 @@ public class SchedulerService extends Service {
                     stopReceiver, new IntentFilter(HiddenBackupConstants.ACTION_STOP_SCHEDULER));
 
         } else if (action.equals(HiddenBackupConstants.SCHEDULED_BACKUP)) {
-            Intent backup = new Intent(this, BackupService.class);
-            backup.setAction(HiddenBackupConstants.FULL_BACKUP);
-            startService(backup);
 
             backupFinish = new BroadcastReceiver() {
                 @Override
@@ -93,6 +90,10 @@ public class SchedulerService extends Service {
 
             localBroadcastManager.registerReceiver(
                     backupFinish, new IntentFilter(HiddenBackupConstants.BACKUP_FINISH));
+
+            Intent backup = new Intent(this, BackupService.class);
+            backup.setAction(HiddenBackupConstants.FULL_BACKUP);
+            startService(backup);
         }
 
         return Service.START_STICKY;

@@ -35,6 +35,9 @@ public class BackupService extends IntentService {
                     }
                 }
             }
+
+            LocalBroadcastManager broadcaster = LocalBroadcastManager.getInstance(this);
+            broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_FINISH));
         }
     }
 
@@ -65,9 +68,6 @@ public class BackupService extends IntentService {
             }
 
             files.close();
-
-            LocalBroadcastManager broadcaster = LocalBroadcastManager.getInstance(this);
-            broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_FINISH));
         }
     }
 
