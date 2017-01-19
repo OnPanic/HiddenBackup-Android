@@ -10,9 +10,4 @@
         android:defaultValue="00:00"
         android:key="@string/pref_scheduler_time"
         android:title="@string/run_scheduler_at" />
-
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="@string/pref_wait_for_wifi"
-        android:title="@string/wait_for_wifi" />
 </PreferenceScreen>

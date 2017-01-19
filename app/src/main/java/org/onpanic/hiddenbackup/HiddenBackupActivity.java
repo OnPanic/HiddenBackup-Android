@@ -29,10 +29,9 @@ import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
 import org.onpanic.hiddenbackup.dialogs.DeleteDirDialog;
 import org.onpanic.hiddenbackup.dialogs.SaveDirDialog;
 import org.onpanic.hiddenbackup.fragments.AppSetup;
-import org.onpanic.hiddenbackup.fragments.BackupNow;
 import org.onpanic.hiddenbackup.fragments.DirsFragment;
+import org.onpanic.hiddenbackup.fragments.FullBackup;
 import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
-import org.onpanic.hiddenbackup.fragments.SetScheduler;
 import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
 import org.onpanic.hiddenbackup.helpers.CheckDependenciesHelper;
 import org.onpanic.hiddenbackup.permissions.PermissionManager;
@@ -104,14 +103,14 @@ public class HiddenBackupActivity extends AppCompatActivity implements
             transaction.replace(R.id.fragment_container, new AppSetup());
         } else {
             switch (item.getItemId()) {
-                case R.id.run_backup_now:
-                    transaction.replace(R.id.fragment_container, new BackupNow());
+                case R.id.scheduled:
+                    transaction.replace(R.id.fragment_container, new FullBackup());
+                    break;
+                case R.id.instant_backup:
+                    // transaction.replace(R.id.fragment_container, new BackupNow());
                     break;
                 case R.id.add_backup_dirs:
                     transaction.replace(R.id.fragment_container, new DirsFragment());
-                    break;
-                case R.id.scheduled:
-                    transaction.replace(R.id.fragment_container, new SetScheduler());
                     break;
             }
         }
@@ -196,7 +195,7 @@ public class HiddenBackupActivity extends AppCompatActivity implements
         if (!CheckDependenciesHelper.checkAll(this)) {
             transaction.replace(R.id.fragment_container, new AppSetup());
         } else {
-            transaction.replace(R.id.fragment_container, new BackupNow());
+            transaction.replace(R.id.fragment_container, new FullBackup());
         }
 
         transaction.commit();
