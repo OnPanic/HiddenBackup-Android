@@ -12,6 +12,21 @@
         android:summary="@string/wait_for_wifi_summary"
         android:title="@string/wait_for_wifi" />
 
+    <PreferenceCategory android:title="@string/server_category">
+        <Preference
+            android:key="@string/pref_scan_server_qr"
+            android:persistent="false"
+            android:summary="@string/scan_server_qr_summary"
+            android:title="@string/scan_server_qr" />
+
+        <Preference
+            android:key="@string/pref_auth_to_clipboard"
+            android:persistent="false"
+            android:summary="@string/auth_to_clipboard_summary"
+            android:title="@string/auth_to_clipboard" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/panic_category">
         <Preference
             android:key="@string/pref_trigger_app"

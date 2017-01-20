@@ -3,14 +3,9 @@ package org.onpanic.hiddenbackup;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -35,6 +30,7 @@ import org.onpanic.hiddenbackup.fragments.HiddenBackupSettings;
 import org.onpanic.hiddenbackup.fragments.InstantBackup;
 import org.onpanic.hiddenbackup.helpers.BarcodeScannerHelper;
 import org.onpanic.hiddenbackup.helpers.CheckDependenciesHelper;
+import org.onpanic.hiddenbackup.helpers.ServerSettingsHelper;
 import org.onpanic.hiddenbackup.permissions.PermissionManager;
 import org.onpanic.hiddenbackup.providers.DirsProvider;
 
@@ -148,18 +144,8 @@ public class HiddenBackupActivity extends AppCompatActivity implements
                 if (resultCode == Activity.RESULT_OK) {
                     try {
                         JSONObject qr_data = new JSONObject(data.getStringExtra("SCAN_RESULT"));
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                        SharedPreferences.Editor edit = preferences.edit();
-                        edit.putString(getString(R.string.pref_server_onion), qr_data.getString("host"));
-                        edit.putString(getString(R.string.pref_server_port), qr_data.getString("port"));
-                        edit.apply();
-
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("cookie", qr_data.getString("cookie"));
-                        clipboard.setPrimaryClip(clip);
-
-                        Toast.makeText(this, R.string.cookie_to_clipboard, Toast.LENGTH_LONG).show();
-
+                        ServerSettingsHelper.save(this, qr_data);
+                        ServerSettingsHelper.authToClipboard(this);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(this, R.string.add_server_failure, Toast.LENGTH_LONG).show();

@@ -14,11 +14,13 @@
     <string name="runned_notification_title">Backup send</string>
     <string name="install_orbot">Install Orbot</string>
     <string name="scan_server_qr">Scan server QR</string>
+    <string name="scan_server_qr_summary">Scan server settings from QR</string>
     <string name="forgot_server">Forgot server</string>
     <string name="forgot_server_summary">Forgot server configuration when a panic action is triggered</string>
     <string name="runned_notification">Notify backup</string>
     <string name="runned_notification_summary">Shows a notification after a backup completes</string>
     <string name="panic_category">On Panic Settings</string>
+    <string name="server_category">Server Settings</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
@@ -38,6 +40,8 @@
     <string name="run_scheduler_at">Run at</string>
     <string name="next_backup_at">Next backup at</string>
     <string name="instant_backup">Instant backup</string>
+    <string name="auth_to_clipboard">Copy auth to clipboard</string>
+    <string name="auth_to_clipboard_summary">Copy server auth string to clipboard for setup Orbot</string>
     <string name="force_backup_now">Force run now</string>
     <string name="instant_backup_gprs">Allow over GPRS</string>
     <string name="instant_backup_gprs_summary">Force backups over GPRS if no WiFi is available</string>
@@ -46,6 +50,7 @@
     <string name="project_url" translatable="false">onpanic.org</string>
     <string name="pref_trigger_app" translatable="false">pref_trigger_app</string>
     <string name="pref_server_onion" translatable="false">pref_server_onion</string>
+    <string name="pref_server_auth" translatable="false">pref_server_auth</string>
     <string name="pref_server_port" translatable="false">pref_server_port</string>
     <string name="pref_runned_notification" translatable="false">pref_runned_notification</string>
     <string name="pref_forgot_server" translatable="false">pref_forgot_server</string>
@@ -55,4 +60,6 @@
     <string name="pref_scheduler_time" translatable="false">pref_scheduler_time</string>
     <string name="pref_instant_backup_enabled" translatable="false">pref_instant_backup_enabled</string>
     <string name="pref_instant_backup_gprs_enabled" translatable="false">pref_instant_backup_gprs_enabled</string>
+    <string name="pref_scan_server_qr" translatable="false">pref_scan_server_qr</string>
+    <string name="pref_auth_to_clipboard" translatable="false">pref_auth_to_clipboard</string>
 </resources>
