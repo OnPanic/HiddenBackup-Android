@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import info.guardianproject.netcipher.client.StrongBuilder;
 import info.guardianproject.netcipher.client.StrongOkHttpClientBuilder;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -26,7 +27,7 @@ public class PingBackupService extends Service implements StrongBuilder.Callback
     private final String TAG = "PingBackupService";
 
     private int mStartId;
-    private String mUrl;
+    private HttpUrl mUrl;
     private LocalBroadcastManager broadcaster;
     private Intent mResponse;
 
@@ -46,7 +47,12 @@ public class PingBackupService extends Service implements StrongBuilder.Callback
         String port = preferences.getString(getString(R.string.pref_server_port), null);
 
         if (port != null && onion != null) {
-            mUrl = "http://" + onion + ":" + port;
+            mUrl = new HttpUrl.Builder()
+                    .scheme("http")
+                    .host(onion)
+                    .port(Integer.parseInt(port))
+                    .build();
+
             try {
                 StrongOkHttpClientBuilder
                         .forMaxSecurity(this)
@@ -55,6 +61,7 @@ public class PingBackupService extends Service implements StrongBuilder.Callback
                 e.printStackTrace();
                 stopSelf(startId);
             }
+
         } else {
             stopSelf(startId);
         }
@@ -63,35 +70,39 @@ public class PingBackupService extends Service implements StrongBuilder.Callback
     }
 
     @Override
-    public void onConnected(OkHttpClient okHttpClient) {
+    public void onConnected(final OkHttpClient okHttpClient) {
         Log.d(TAG, "onConnected");
 
-        Request request = new Request.Builder()
-                .url(mUrl)
-                .get()
-                .build();
+        new Thread() {
+            @Override
+            public void run() {
+                Request request = new Request.Builder()
+                        .url(mUrl)
+                        .get()
+                        .build();
+                try {
+                    Response response = okHttpClient.newCall(request).execute();
+                    JSONObject response_json = new JSONObject(response.body().string());
+                    if (response_json.getBoolean("running")) {
+                        mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_ONLINE);
+                    } else {
+                        mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_OFFLINE);
+                    }
+                } catch (IOException | JSONException e) {
+                    mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_OFFLINE);
+                    e.printStackTrace();
+                }
 
-        try {
-            Response response = okHttpClient.newCall(request).execute();
-            JSONObject response_json = new JSONObject(response.body().string());
-            if (response_json.getBoolean("running")) {
-                mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_ONLINE);
-            } else {
-                mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_OFFLINE);
+                broadcaster.sendBroadcast(mResponse);
+                PingBackupService.this.stopSelf(mStartId);
             }
-        } catch (IOException | JSONException e) {
-            mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_OFFLINE);
-            e.printStackTrace();
-        }
-
-        broadcaster.sendBroadcast(mResponse);
-
-        stopSelf(mStartId);
+        }.start();
     }
 
     @Override
     public void onConnectionException(Exception e) {
         Log.d(TAG, "onConnectionException");
+        e.printStackTrace();
         mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_OFFLINE);
         broadcaster.sendBroadcast(mResponse);
         stopSelf(mStartId);
