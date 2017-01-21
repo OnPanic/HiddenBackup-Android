@@ -10,7 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
-import org.onpanic.hiddenbackup.services.FileObserverService;
+import org.onpanic.hiddenbackup.services.OrbotService;
 
 
 public class InstantBackup extends PreferenceFragment {
@@ -32,7 +32,7 @@ public class InstantBackup extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 if ((boolean) o) {
-                    Intent intent = new Intent(mContext, FileObserverService.class);
+                    Intent intent = new Intent(mContext, OrbotService.class);
                     intent.setAction(HiddenBackupConstants.ACTION_START_INSTANT);
                     mContext.startService(intent);
                 } else {

@@ -14,7 +14,7 @@ import android.widget.ImageView;
 
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
-import org.onpanic.hiddenbackup.services.BackupService;
+import org.onpanic.hiddenbackup.services.OrbotService;
 
 public class ForceFullBackup extends Fragment {
     private Context mContext;
@@ -36,7 +36,7 @@ public class ForceFullBackup extends Fragment {
             public void onClick(View view) {
                 Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.clockwise);
                 view.startAnimation(animation);
-                Intent intent = new Intent(mContext, BackupService.class);
+                Intent intent = new Intent(mContext, OrbotService.class);
                 intent.setAction(HiddenBackupConstants.FULL_BACKUP);
                 mContext.startService(intent);
             }

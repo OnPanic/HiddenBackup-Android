@@ -10,7 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
-import org.onpanic.hiddenbackup.services.SchedulerService;
+import org.onpanic.hiddenbackup.services.OrbotService;
 
 public class SetScheduler extends PreferenceFragment {
     private Context mContext;
@@ -31,7 +31,7 @@ public class SetScheduler extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 if ((boolean) o) {
-                    Intent intent = new Intent(mContext, SchedulerService.class);
+                    Intent intent = new Intent(mContext, OrbotService.class);
                     intent.setAction(HiddenBackupConstants.ACTION_START_SCHEDULER);
                     mContext.startService(intent);
                 } else {
