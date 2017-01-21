@@ -22,8 +22,6 @@ public class AppSetup extends Fragment {
     private Context mContext;
     private OnScanQRCallback onScanQRCallback;
 
-    private View.OnClickListener clickListener;
-
     public AppSetup() {
         // Required empty public constructor
     }
