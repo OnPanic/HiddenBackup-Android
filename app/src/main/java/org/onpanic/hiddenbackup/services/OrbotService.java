@@ -42,7 +42,8 @@ public class OrbotService extends Service {
                     break;
             }
 
-            stopSelf(mStartId);
+            orbotHelper.removeStatusCallback(statusCallback);
+            OrbotService.this.stopSelf(mStartId);
         }
 
         @Override
@@ -63,13 +64,15 @@ public class OrbotService extends Service {
         @Override
         public void onStatusTimeout() {
             Log.d(TAG, "onStatusTimeout");
-            stopSelf(mStartId);
+            orbotHelper.removeStatusCallback(statusCallback);
+            OrbotService.this.stopSelf(mStartId);
         }
 
         @Override
         public void onNotYetInstalled() {
             Log.d(TAG, "onNotYetInstalled");
-            stopSelf(mStartId);
+            orbotHelper.removeStatusCallback(statusCallback);
+            OrbotService.this.stopSelf(mStartId);
         }
     };
 

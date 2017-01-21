@@ -17,7 +17,6 @@ import java.io.IOException;
 
 import info.guardianproject.netcipher.client.StrongBuilder;
 import info.guardianproject.netcipher.client.StrongOkHttpClientBuilder;
-import info.guardianproject.netcipher.proxy.OrbotHelper;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -36,7 +35,7 @@ public class BackupService extends IntentService implements StrongBuilder.Callba
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null && OrbotHelper.requestStartTor(this)) {
+        if (intent != null) {
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             String onion = preferences.getString(getString(R.string.pref_server_onion), null);
