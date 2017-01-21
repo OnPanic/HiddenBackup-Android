@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import info.guardianproject.netcipher.client.StrongBuilder;
 import info.guardianproject.netcipher.client.StrongOkHttpClientBuilder;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -33,7 +34,7 @@ public class BackupService extends Service implements StrongBuilder.Callback<OkH
     private Intent mIntent;
     private int mStartId;
     private OkHttpClient httpClient;
-    private String mUrl;
+    private HttpUrl mUrl;
 
     public BackupService() {
     }
@@ -49,7 +50,12 @@ public class BackupService extends Service implements StrongBuilder.Callback<OkH
         String port = preferences.getString(getString(R.string.pref_server_port), null);
 
         if (port != null && onion != null) {
-            mUrl = "http://" + onion + ":" + port;
+            mUrl = new HttpUrl.Builder()
+                    .scheme("http")
+                    .host(onion)
+                    .port(Integer.parseInt(port))
+                    .build();
+
             try {
                 StrongOkHttpClientBuilder
                         .forMaxSecurity(this)
