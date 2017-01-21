@@ -1,12 +1,15 @@
 package org.onpanic.hiddenbackup.services;
 
-import android.app.IntentService;
+import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
@@ -24,36 +27,42 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class BackupService extends IntentService implements StrongBuilder.Callback<OkHttpClient> {
+public class BackupService extends Service implements StrongBuilder.Callback<OkHttpClient> {
+    private final String TAG = "BackupService";
+
     private Intent mIntent;
+    private int mStartId;
     private OkHttpClient httpClient;
     private String mUrl;
 
     public BackupService() {
-        super(BackupService.class.getName());
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        mIntent = intent;
+        mStartId = startId;
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String onion = preferences.getString(getString(R.string.pref_server_onion), null);
-            String port = preferences.getString(getString(R.string.pref_server_port), null);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-            if (port != null && onion != null) {
-                mUrl = "http://" + onion + ":" + port;
-                mIntent = intent;
+        String onion = preferences.getString(getString(R.string.pref_server_onion), null);
+        String port = preferences.getString(getString(R.string.pref_server_port), null);
 
-                try {
-                    StrongOkHttpClientBuilder
-                            .forMaxSecurity(this)
-                            .build(this);
-                } catch (Exception e) {
-                    // TODO
-                }
+        if (port != null && onion != null) {
+            mUrl = "http://" + onion + ":" + port;
+            try {
+                StrongOkHttpClientBuilder
+                        .forMaxSecurity(this)
+                        .build(this);
+            } catch (Exception e) {
+                e.printStackTrace();
+                stopSelf(startId);
             }
+        } else {
+            stopSelf(startId);
         }
+
+        return Service.START_STICKY;
     }
 
     private void fullBackup() {
@@ -89,29 +98,36 @@ public class BackupService extends IntentService implements StrongBuilder.Callba
     }
 
     private void fileBackup(File file) {
+        if (file.isDirectory()) {
+            for (File f : file.listFiles()) {
+                fileBackup(f);
+            }
+        } else {
+            RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("file",
+                            file.getName(),
+                            RequestBody.create(MediaType.parse("multipart/form-data;"), file)
+                    )
+                    .build();
 
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("file",
-                        file.getName(),
-                        RequestBody.create(MediaType.parse("multipart/form-data;"), file)
-                )
-                .build();
-
-        Request request = new Request.Builder()
-                .url(mUrl)
-                .post(requestBody)
-                .build();
-        try {
-            Response response = httpClient.newCall(request).execute();
-            // response.body().string();
-        } catch (IOException e) {
-            e.printStackTrace();
+            Request request = new Request.Builder()
+                    .url(mUrl)
+                    .post(requestBody)
+                    .build();
+            try {
+                Response response = httpClient.newCall(request).execute();
+                // response.body().string();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void onConnected(OkHttpClient okHttpClient) {
+        Log.d(TAG, "onConnected");
+
         httpClient = okHttpClient;
 
         final String action = mIntent.getAction();
@@ -130,20 +146,31 @@ public class BackupService extends IntentService implements StrongBuilder.Callba
 
         LocalBroadcastManager broadcaster = LocalBroadcastManager.getInstance(this);
         broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_FINISH));
+
+        stopSelf(mStartId);
     }
 
     @Override
     public void onConnectionException(Exception e) {
-        // TODO
+        Log.d(TAG, "onConnectionException");
+        stopSelf(mStartId);
     }
 
     @Override
     public void onTimeout() {
-        // TODO
+        Log.d(TAG, "onTimeout");
+        stopSelf(mStartId);
     }
 
     @Override
     public void onInvalid() {
-        // TODO
+        Log.d(TAG, "onInvalid");
+        stopSelf(mStartId);
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }
