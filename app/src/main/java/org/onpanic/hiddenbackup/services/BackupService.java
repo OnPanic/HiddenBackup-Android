@@ -103,30 +103,36 @@ public class BackupService extends Service implements StrongBuilder.Callback<OkH
         }
     }
 
-    private void fileBackup(File file) {
+    private void fileBackup(final File file) {
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
                 fileBackup(f);
             }
         } else {
-            RequestBody requestBody = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("file",
-                            file.getName(),
-                            RequestBody.create(MediaType.parse("multipart/form-data;"), file)
-                    )
-                    .build();
+            new Thread() {
+                @Override
+                public void run() {
+                    RequestBody requestBody = new MultipartBody.Builder()
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("file",
+                                    file.getName(),
+                                    RequestBody.create(MediaType.parse("application/octet-stream"), file)
+                            )
+                            .build();
 
-            Request request = new Request.Builder()
-                    .url(mUrl)
-                    .post(requestBody)
-                    .build();
-            try {
-                Response response = httpClient.newCall(request).execute();
-                // response.body().string();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                    Request request = new Request.Builder()
+                            .url(mUrl)
+                            .post(requestBody)
+                            .build();
+
+                    try {
+                        Response response = httpClient.newCall(request).execute();
+                        // response.body().string();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
         }
     }
 
@@ -138,16 +144,19 @@ public class BackupService extends Service implements StrongBuilder.Callback<OkH
 
         final String action = mIntent.getAction();
 
-        if (action.equals(HiddenBackupConstants.FULL_BACKUP)) {
-            fullBackup();
-        } else if (action.equals(HiddenBackupConstants.FILE_BACKUP)) {
-            String fileName = mIntent.getStringExtra(DirsProvider.Dir.PATH);
-            if (fileName != null) {
-                File file = new File(fileName);
-                if (file.exists() && !file.isDirectory()) {
-                    fileBackup(file);
+        switch (action) {
+            case HiddenBackupConstants.FULL_BACKUP:
+                fullBackup();
+                break;
+            case HiddenBackupConstants.FILE_BACKUP:
+                String fileName = mIntent.getStringExtra(DirsProvider.Dir.PATH);
+                if (fileName != null) {
+                    File file = new File(fileName);
+                    if (file.exists() && !file.isDirectory()) {
+                        fileBackup(file);
+                    }
                 }
-            }
+                break;
         }
 
         LocalBroadcastManager broadcaster = LocalBroadcastManager.getInstance(this);
@@ -158,6 +167,7 @@ public class BackupService extends Service implements StrongBuilder.Callback<OkH
 
     @Override
     public void onConnectionException(Exception e) {
+        e.printStackTrace();
         Log.d(TAG, "onConnectionException");
         stopSelf(mStartId);
     }
