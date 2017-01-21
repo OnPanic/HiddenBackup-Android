@@ -44,8 +44,12 @@
     <string name="auth_to_clipboard_summary">Copy server auth string to clipboard for setup Orbot</string>
     <string name="force_backup_now">Force run now</string>
     <string name="instant_backup_gprs">Allow over GPRS</string>
+    <string name="check_backup_server_status">Ping server</string>
+    <string name="check_backup_server_status_summary">Check the backup server connection status</string>
     <string name="instant_backup_gprs_summary">Force backups over GPRS if no WiFi is available</string>
     <string name="please_grant_permissions_for_external_storage">Please grant permissions for external storage</string>
+    <string name="server_online">Backup server is ONLINE</string>
+    <string name="server_offline">Backup server is OFFLINE</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>
     <string name="pref_trigger_app" translatable="false">pref_trigger_app</string>
@@ -62,4 +66,5 @@
     <string name="pref_instant_backup_gprs_enabled" translatable="false">pref_instant_backup_gprs_enabled</string>
     <string name="pref_scan_server_qr" translatable="false">pref_scan_server_qr</string>
     <string name="pref_auth_to_clipboard" translatable="false">pref_auth_to_clipboard</string>
+    <string name="pref_check_backup_server_status" translatable="false">pref_check_backup_server_status</string>
 </resources>

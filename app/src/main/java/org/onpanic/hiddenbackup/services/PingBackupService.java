@@ -28,6 +28,7 @@ public class PingBackupService extends Service implements StrongBuilder.Callback
     private int mStartId;
     private String mUrl;
     private LocalBroadcastManager broadcaster;
+    private Intent mResponse;
 
     public PingBackupService() {
     }
@@ -36,6 +37,8 @@ public class PingBackupService extends Service implements StrongBuilder.Callback
     public int onStartCommand(Intent intent, int flags, int startId) {
         mStartId = startId;
         broadcaster = LocalBroadcastManager.getInstance(this);
+
+        mResponse = new Intent(HiddenBackupConstants.PING_SERVER_RESPONSE);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -59,7 +62,6 @@ public class PingBackupService extends Service implements StrongBuilder.Callback
         return Service.START_STICKY;
     }
 
-
     @Override
     public void onConnected(OkHttpClient okHttpClient) {
         Log.d(TAG, "onConnected");
@@ -73,14 +75,16 @@ public class PingBackupService extends Service implements StrongBuilder.Callback
             Response response = okHttpClient.newCall(request).execute();
             JSONObject response_json = new JSONObject(response.body().string());
             if (response_json.getBoolean("running")) {
-                broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_SERVER_ONLINE));
+                mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_ONLINE);
             } else {
-                broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_SERVER_OFFLINE));
+                mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_OFFLINE);
             }
         } catch (IOException | JSONException e) {
-            broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_SERVER_OFFLINE));
+            mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_OFFLINE);
             e.printStackTrace();
         }
+
+        broadcaster.sendBroadcast(mResponse);
 
         stopSelf(mStartId);
     }
@@ -88,21 +92,24 @@ public class PingBackupService extends Service implements StrongBuilder.Callback
     @Override
     public void onConnectionException(Exception e) {
         Log.d(TAG, "onConnectionException");
-        broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_SERVER_OFFLINE));
+        mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_OFFLINE);
+        broadcaster.sendBroadcast(mResponse);
         stopSelf(mStartId);
     }
 
     @Override
     public void onTimeout() {
         Log.d(TAG, "onTimeout");
-        broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_SERVER_OFFLINE));
+        mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_OFFLINE);
+        broadcaster.sendBroadcast(mResponse);
         stopSelf(mStartId);
     }
 
     @Override
     public void onInvalid() {
         Log.d(TAG, "onInvalid");
-        broadcaster.sendBroadcast(new Intent(HiddenBackupConstants.BACKUP_SERVER_OFFLINE));
+        mResponse.putExtra(HiddenBackupConstants.BACKUP_SERVER_STATUS, HiddenBackupConstants.BACKUP_SERVER_OFFLINE);
+        broadcaster.sendBroadcast(mResponse);
         stopSelf(mStartId);
     }
 

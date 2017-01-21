@@ -40,6 +40,11 @@ public class OrbotService extends Service {
                     full.setAction(action);
                     startService(full);
                     break;
+                case HiddenBackupConstants.PING_BACKUP_SERVER:
+                    Intent ping = new Intent(getApplicationContext(), PingBackupService.class);
+                    ping.setAction(action);
+                    startService(ping);
+                    break;
             }
 
             orbotHelper.removeStatusCallback(statusCallback);

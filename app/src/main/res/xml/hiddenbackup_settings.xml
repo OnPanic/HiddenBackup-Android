@@ -25,6 +25,12 @@
             android:summary="@string/auth_to_clipboard_summary"
             android:title="@string/auth_to_clipboard" />
 
+        <Preference
+            android:key="@string/pref_check_backup_server_status"
+            android:persistent="false"
+            android:summary="@string/check_backup_server_status_summary"
+            android:title="@string/check_backup_server_status" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/panic_category">
