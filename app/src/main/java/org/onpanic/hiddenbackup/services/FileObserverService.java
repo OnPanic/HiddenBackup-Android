@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.os.FileObserver;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
 import org.onpanic.hiddenbackup.providers.DirsProvider;
@@ -17,42 +18,33 @@ import org.onpanic.hiddenbackup.providers.DirsProvider;
 import java.io.File;
 import java.util.ArrayList;
 
+import info.guardianproject.netcipher.proxy.OrbotHelper;
+import info.guardianproject.netcipher.proxy.StatusCallback;
+
 public class FileObserverService extends Service {
+    private final String TAG = "FileObserverService";
+
     private LocalBroadcastManager localBroadcastManager;
-    private BroadcastReceiver stopReceiver;
+    private int mStartId;
     private ArrayList<FileObserver> fileObservers;
+    private OrbotHelper orbotHelper;
 
-    public FileObserverService() {
-    }
+    private BroadcastReceiver stopReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            localBroadcastManager.unregisterReceiver(stopReceiver);
+            for (FileObserver o : fileObservers) {
+                o.stopWatching();
+            }
+            stopSelf(mStartId);
+        }
+    };
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        fileObservers = new ArrayList<>();
-        localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
-    }
+    private StatusCallback statusCallback = new StatusCallback() {
+        @Override
+        public void onEnabled(Intent intent) {
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, final int startId) {
-        String action = intent.getAction();
-
-        if (action.equals(HiddenBackupConstants.ACTION_START_INSTANT)) {
-
-            stopReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    localBroadcastManager.unregisterReceiver(stopReceiver);
-                    for (FileObserver o : fileObservers) {
-                        o.stopWatching();
-                    }
-                    stopSelf(startId);
-                }
-            };
+            Log.d(TAG, "onEnabled");
 
             localBroadcastManager.registerReceiver(
                     stopReceiver, new IntentFilter(HiddenBackupConstants.ACTION_STOP_INSTANT));
@@ -100,6 +92,53 @@ public class FileObserverService extends Service {
             }
         }
 
+        @Override
+        public void onStarting() {
+            Log.d(TAG, "onStarting");
+        }
+
+        @Override
+        public void onStopping() {
+            Log.d(TAG, "onStopping");
+        }
+
+        @Override
+        public void onDisabled() {
+            Log.d(TAG, "onDisabled");
+        }
+
+        @Override
+        public void onStatusTimeout() {
+            Log.d(TAG, "onStatusTimeout");
+        }
+
+        @Override
+        public void onNotYetInstalled() {
+            Log.d(TAG, "onNotYetInstalled");
+        }
+    };
+
+    public FileObserverService() {
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        fileObservers = new ArrayList<>();
+        localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        orbotHelper = OrbotHelper.get(getApplicationContext());
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, final int startId) {
+        mStartId = startId;
+        orbotHelper.addStatusCallback(statusCallback);
+        orbotHelper.init();
         return Service.START_STICKY;
     }
 }
