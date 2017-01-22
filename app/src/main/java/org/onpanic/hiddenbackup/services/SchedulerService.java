@@ -14,14 +14,13 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
-import org.onpanic.hiddenbackup.notifications.TriggerNotification;
+import org.onpanic.hiddenbackup.receivers.ScheduledBackupReceiver;
 
 import java.util.Calendar;
 
 public class SchedulerService extends Service {
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver stopReceiver;
-    private BroadcastReceiver backupFinish;
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
     private SharedPreferences preferences;
@@ -44,57 +43,30 @@ public class SchedulerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId) {
-        String action = intent.getAction();
+        alarmIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ScheduledBackupReceiver.class), 0);
 
-        if (action.equals(HiddenBackupConstants.ACTION_START_SCHEDULER)) {
+        String[] time = preferences.getString(getString(R.string.pref_scheduler_time), "00:00").split(":");
 
-            Intent service = new Intent(this, SchedulerService.class);
-            service.setAction(HiddenBackupConstants.FULL_BACKUP);
-            alarmIntent = PendingIntent.getBroadcast(this, 0, service, 0);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
 
-            String[] time = preferences.getString(getString(R.string.pref_scheduler_time), "00:00").split(":");
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
-            calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+        stopReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                localBroadcastManager.unregisterReceiver(stopReceiver);
+                alarmMgr.cancel(alarmIntent);
+                SchedulerService.this.stopSelf(startId);
+            }
+        };
 
-            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, alarmIntent);
+        localBroadcastManager.registerReceiver(
+                stopReceiver, new IntentFilter(HiddenBackupConstants.ACTION_STOP_SCHEDULER));
 
-            stopReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    localBroadcastManager.unregisterReceiver(stopReceiver);
-                    alarmMgr.cancel(alarmIntent);
-                    stopSelf(startId);
-                }
-            };
-
-            localBroadcastManager.registerReceiver(
-                    stopReceiver, new IntentFilter(HiddenBackupConstants.ACTION_STOP_SCHEDULER));
-
-        } else if (action.equals(HiddenBackupConstants.SCHEDULED_BACKUP)) {
-
-            backupFinish = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    localBroadcastManager.unregisterReceiver(backupFinish);
-                    if (preferences.getBoolean(getString(R.string.pref_runned_notification), false)) {
-                        TriggerNotification notification = new TriggerNotification(getApplicationContext());
-                        notification.show();
-                    }
-
-                }
-            };
-
-            localBroadcastManager.registerReceiver(
-                    backupFinish, new IntentFilter(HiddenBackupConstants.BACKUP_FINISH));
-
-            Intent backup = new Intent(this, BackupService.class);
-            backup.setAction(HiddenBackupConstants.FULL_BACKUP);
-            startService(backup);
-        }
 
         return Service.START_STICKY;
     }

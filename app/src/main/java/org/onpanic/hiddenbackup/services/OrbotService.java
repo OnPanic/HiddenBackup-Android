@@ -22,28 +22,20 @@ public class OrbotService extends Service {
         public void onEnabled(Intent intent) {
             Log.d(TAG, "onEnabled");
 
-            String action = mStartIntent.getAction();
-
-            switch (action) {
+            switch (mStartIntent.getAction()) {
                 case HiddenBackupConstants.ACTION_START_INSTANT:
-                    Intent instant = new Intent(getApplicationContext(), FileObserverService.class);
-                    instant.setAction(action);
-                    startService(instant);
+                    startService(new Intent(getApplicationContext(), FileObserverService.class));
                     break;
                 case HiddenBackupConstants.ACTION_START_SCHEDULER:
-                    Intent scheduler = new Intent(getApplicationContext(), SchedulerService.class);
-                    scheduler.setAction(action);
-                    startService(scheduler);
+                    startService(new Intent(getApplicationContext(), SchedulerService.class));
                     break;
                 case HiddenBackupConstants.FULL_BACKUP:
                     Intent full = new Intent(getApplicationContext(), BackupService.class);
-                    full.setAction(action);
+                    full.setAction(HiddenBackupConstants.FULL_BACKUP);
                     startService(full);
                     break;
                 case HiddenBackupConstants.PING_BACKUP_SERVER:
-                    Intent ping = new Intent(getApplicationContext(), PingBackupService.class);
-                    ping.setAction(action);
-                    startService(ping);
+                    startService(new Intent(getApplicationContext(), PingBackupService.class));
                     break;
             }
 

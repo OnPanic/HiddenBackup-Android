@@ -50,6 +50,11 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".receivers.ScheduledBackupReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
         <provider
             android:name=".providers.DirsProvider"
             android:authorities="org.onpanic.hiddenbackup.DIRS_PROVIDER"
