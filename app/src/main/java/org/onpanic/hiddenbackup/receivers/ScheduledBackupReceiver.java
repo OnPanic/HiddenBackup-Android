@@ -41,7 +41,7 @@ public class ScheduledBackupReceiver extends BroadcastReceiver {
         localBroadcastManager.registerReceiver(
                 backupFinish, new IntentFilter(HiddenBackupConstants.BACKUP_FINISH));
 
-        Intent backup = new Intent(context, BackupService.class);
+        Intent backup = new Intent(context, OrbotService.class);
         backup.setAction(HiddenBackupConstants.FULL_BACKUP);
         context.startService(backup);
     }
