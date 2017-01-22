@@ -56,6 +56,7 @@ public class PingBackupService extends Service implements StrongBuilder.Callback
             try {
                 StrongOkHttpClientBuilder
                         .forMaxSecurity(this)
+                        .withTorValidation()
                         .build(this);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -59,6 +59,7 @@ public class BackupService extends Service implements StrongBuilder.Callback<OkH
             try {
                 StrongOkHttpClientBuilder
                         .forMaxSecurity(this)
+                        .withTorValidation()
                         .build(this);
             } catch (Exception e) {
                 e.printStackTrace();
