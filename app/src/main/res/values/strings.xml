@@ -50,6 +50,7 @@
     <string name="please_grant_permissions_for_external_storage">Please grant permissions for external storage</string>
     <string name="server_online">Backup server is ONLINE</string>
     <string name="server_offline">Backup server is OFFLINE</string>
+    <string name="ping_send">Ping send....wait....</string>
 
     <string name="project_url" translatable="false">onpanic.org</string>
     <string name="pref_trigger_app" translatable="false">pref_trigger_app</string>

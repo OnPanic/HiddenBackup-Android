@@ -73,6 +73,7 @@ public class HiddenBackupSettings extends PreferenceFragment {
                 Intent intent = new Intent(mContext, OrbotService.class);
                 intent.setAction(HiddenBackupConstants.PING_BACKUP_SERVER);
                 mContext.startService(intent);
+                Toast.makeText(mContext, R.string.ping_send, Toast.LENGTH_LONG).show();
                 return true;
             }
         });
