@@ -67,7 +67,6 @@ public class SchedulerService extends Service {
         localBroadcastManager.registerReceiver(
                 stopReceiver, new IntentFilter(HiddenBackupConstants.ACTION_STOP_SCHEDULER));
 
-
         return Service.START_STICKY;
     }
 }

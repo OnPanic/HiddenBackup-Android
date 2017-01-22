@@ -35,7 +35,6 @@ public class ScheduledBackupReceiver extends BroadcastReceiver {
                     TriggerNotification notification = new TriggerNotification(context);
                     notification.show();
                 }
-
             }
         };
 
