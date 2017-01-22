@@ -19,7 +19,7 @@ public class OrbotService extends Service {
     private Intent mStartIntent;
 
     private StatusCallback statusCallback = new StatusCallback() {
-        private boolean waitPolipo = false;
+        private boolean waitPolipo = false; // Ugly fix
 
         @Override
         public void onEnabled(Intent intent) {
@@ -28,10 +28,11 @@ public class OrbotService extends Service {
             if (waitPolipo) { // Ugly fix
                 try {
                     Thread.sleep(2000);
-                    waitPolipo = false;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                waitPolipo = false;
             }
 
             switch (mStartIntent.getAction()) {
@@ -64,7 +65,7 @@ public class OrbotService extends Service {
         @Override
         public void onStarting() {
             Log.d(TAG, "onStarting");
-            waitPolipo = true;
+            waitPolipo = true; // Ugly fix
         }
 
         @Override
