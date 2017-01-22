@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
+import org.onpanic.hiddenbackup.providers.DirsProvider;
 
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import info.guardianproject.netcipher.proxy.StatusCallback;
@@ -36,6 +37,12 @@ public class OrbotService extends Service {
                     break;
                 case HiddenBackupConstants.PING_BACKUP_SERVER:
                     startService(new Intent(getApplicationContext(), PingBackupService.class));
+                    break;
+                case HiddenBackupConstants.FILE_BACKUP:
+                    Intent backup = new Intent(getApplicationContext(), BackupService.class);
+                    backup.setAction(HiddenBackupConstants.FILE_BACKUP);
+                    backup.putExtra(DirsProvider.Dir.PATH, intent.getStringExtra(DirsProvider.Dir.PATH));
+                    startService(backup);
                     break;
             }
 

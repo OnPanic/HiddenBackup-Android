@@ -75,7 +75,7 @@ public class FileObserverService extends Service {
                         @Override
                         public void onEvent(int event, String file) {
                             if (event == FileObserver.CREATE) {
-                                Intent backup = new Intent(getApplicationContext(), BackupService.class);
+                                Intent backup = new Intent(getApplicationContext(), OrbotService.class);
                                 backup.setAction(HiddenBackupConstants.FILE_BACKUP);
                                 backup.putExtra(DirsProvider.Dir.PATH, file);
                                 startService(backup);
