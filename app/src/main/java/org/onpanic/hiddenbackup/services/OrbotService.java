@@ -19,9 +19,20 @@ public class OrbotService extends Service {
     private Intent mStartIntent;
 
     private StatusCallback statusCallback = new StatusCallback() {
+        private boolean waitPolipo = false;
+
         @Override
         public void onEnabled(Intent intent) {
             Log.d(TAG, "onEnabled");
+
+            if (waitPolipo) { // Ugly fix
+                try {
+                    Thread.sleep(2000);
+                    waitPolipo = false;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
             switch (mStartIntent.getAction()) {
                 case HiddenBackupConstants.ACTION_START_INSTANT:
@@ -53,6 +64,7 @@ public class OrbotService extends Service {
         @Override
         public void onStarting() {
             Log.d(TAG, "onStarting");
+            waitPolipo = true;
         }
 
         @Override
