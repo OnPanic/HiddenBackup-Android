@@ -11,7 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
 import org.onpanic.hiddenbackup.notifications.TriggerNotification;
-import org.onpanic.hiddenbackup.services.BackupService;
+import org.onpanic.hiddenbackup.services.OrbotService;
 
 
 public class ScheduledBackupReceiver extends BroadcastReceiver {
