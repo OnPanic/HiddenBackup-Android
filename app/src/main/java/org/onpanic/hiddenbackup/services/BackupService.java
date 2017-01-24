@@ -152,10 +152,7 @@ public class BackupService extends Service implements StrongBuilder.Callback<OkH
             case HiddenBackupConstants.FILE_BACKUP:
                 String fileName = mIntent.getStringExtra(DirsProvider.Dir.PATH);
                 if (fileName != null) {
-                    File file = new File(fileName);
-                    if (file.exists() && !file.isDirectory()) {
-                        fileBackup(file);
-                    }
+                    fileBackup(new File(fileName));
                 }
                 break;
         }

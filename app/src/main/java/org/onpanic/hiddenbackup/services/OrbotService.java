@@ -53,7 +53,7 @@ public class OrbotService extends Service {
                 case HiddenBackupConstants.FILE_BACKUP:
                     Intent backup = new Intent(getApplicationContext(), BackupService.class);
                     backup.setAction(HiddenBackupConstants.FILE_BACKUP);
-                    backup.putExtra(DirsProvider.Dir.PATH, intent.getStringExtra(DirsProvider.Dir.PATH));
+                    backup.putExtra(DirsProvider.Dir.PATH, mStartIntent.getStringExtra(DirsProvider.Dir.PATH));
                     startService(backup);
                     break;
             }

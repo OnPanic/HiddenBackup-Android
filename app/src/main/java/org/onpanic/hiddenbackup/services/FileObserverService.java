@@ -12,25 +12,18 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
+import org.onpanic.hiddenbackup.helpers.RecursiveFileObserver;
 import org.onpanic.hiddenbackup.providers.DirsProvider;
 
 import java.io.File;
 import java.util.ArrayList;
 
 public class FileObserverService extends Service {
+    private final ArrayList<RecursiveFileObserver> fileObservers = new ArrayList<>();
+
     private LocalBroadcastManager localBroadcastManager;
     private int mStartId;
-    private ArrayList<FileObserver> fileObservers;
-    private BroadcastReceiver stopReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            localBroadcastManager.unregisterReceiver(stopReceiver);
-            for (FileObserver o : fileObservers) {
-                o.stopWatching();
-            }
-            FileObserverService.this.stopSelf(mStartId);
-        }
-    };
+    private BroadcastReceiver stopReceiver;
 
     public FileObserverService() {
     }
@@ -38,7 +31,6 @@ public class FileObserverService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        fileObservers = new ArrayList<>();
         localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
     }
 
@@ -50,6 +42,17 @@ public class FileObserverService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mStartId = startId;
+
+        stopReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                localBroadcastManager.unregisterReceiver(stopReceiver);
+                for (RecursiveFileObserver o : fileObservers) {
+                    o.stopWatching();
+                }
+                FileObserverService.this.stopSelf(mStartId);
+            }
+        };
 
         localBroadcastManager.registerReceiver(
                 stopReceiver, new IntentFilter(HiddenBackupConstants.ACTION_STOP_INSTANT));
@@ -71,17 +74,22 @@ public class FileObserverService extends Service {
                 File current = new File(files.getString(files.getColumnIndex(DirsProvider.Dir.PATH)));
 
                 if (current.exists()) {
-                    FileObserver observer = new FileObserver(current.getAbsolutePath()) {
-                        @Override
-                        public void onEvent(int event, String file) {
-                            if (event == FileObserver.CREATE) {
-                                Intent backup = new Intent(getApplicationContext(), OrbotService.class);
-                                backup.setAction(HiddenBackupConstants.FILE_BACKUP);
-                                backup.putExtra(DirsProvider.Dir.PATH, file);
-                                startService(backup);
+                    RecursiveFileObserver observer = new RecursiveFileObserver(
+                            current.getAbsolutePath(),
+                            new RecursiveFileObserver.EventListener() {
+                                @Override
+                                public void onEvent(int event, File file) {
+                                    if (event == FileObserver.CREATE) {
+                                        if (!file.isDirectory()) {
+                                            Intent backup = new Intent(getApplicationContext(), OrbotService.class);
+                                            backup.setAction(HiddenBackupConstants.FILE_BACKUP);
+                                            backup.putExtra(DirsProvider.Dir.PATH, file.getAbsolutePath());
+                                            startService(backup);
+                                        }
+                                    }
+                                }
                             }
-                        }
-                    };
+                    );
 
                     observer.startWatching();
                     fileObservers.add(observer);
