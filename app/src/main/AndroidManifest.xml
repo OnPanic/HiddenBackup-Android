@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -50,6 +51,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".receivers.ConnectionChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name=".receivers.ScheduledBackupReceiver"
             android:enabled="true"
@@ -82,4 +89,5 @@
             android:enabled="true"
             android:exported="false" />
     </application>
+
 </manifest>

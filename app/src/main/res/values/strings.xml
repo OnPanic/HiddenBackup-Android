@@ -68,4 +68,5 @@
     <string name="pref_scan_server_qr" translatable="false">pref_scan_server_qr</string>
     <string name="pref_auth_to_clipboard" translatable="false">pref_auth_to_clipboard</string>
     <string name="pref_check_backup_server_status" translatable="false">pref_check_backup_server_status</string>
+    <string name="pref_scheduler_delayed" translatable="false">pref_scheduler_delayed</string>
 </resources>
