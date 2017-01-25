@@ -11,6 +11,7 @@ public class HiddenBackupConstants {
     public static final String FULL_BACKUP = "org.onpanic.hiddenbackup.FULL_BACKUP";
     public static final String FILE_BACKUP = "org.onpanic.hiddenbackup.FILE_BACKUP";
     public static final String SCHEDULED_BACKUP = "org.onpanic.hiddenbackup.SCHEDULED_BACKUP";
+    public static final String PANIC_BACKUP = "org.onpanic.hiddenbackup.PANIC_BACKUP";
     public static final String ACTION_START_INSTANT = "org.onpanic.hiddenbackup.ACTION_START_INSTANT";
     public static final String ACTION_STOP_INSTANT = "org.onpanic.hiddenbackup.ACTION_STOP_INSTANT";
     public static final String BACKUP_SERVER_STATUS = "org.onpanic.hiddenbackup.BACKUP_SERVER_STATUS";

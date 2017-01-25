@@ -51,7 +51,7 @@
         </receiver>
 
         <receiver
-            android:name=".receivers.ScheduledBackupReceiver"
+            android:name=".receivers.RunBackupReceiver"
             android:enabled="true"
             android:exported="false" />
 

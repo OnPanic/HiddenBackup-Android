@@ -14,7 +14,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import org.onpanic.hiddenbackup.R;
 import org.onpanic.hiddenbackup.constants.HiddenBackupConstants;
-import org.onpanic.hiddenbackup.receivers.ScheduledBackupReceiver;
+import org.onpanic.hiddenbackup.receivers.RunBackupReceiver;
 
 import java.util.Calendar;
 
@@ -43,7 +43,7 @@ public class SchedulerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId) {
-        alarmIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ScheduledBackupReceiver.class), 0);
+        alarmIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, RunBackupReceiver.class), 0);
 
         String[] time = preferences.getString(getString(R.string.pref_scheduler_time), "00:00").split(":");
 
