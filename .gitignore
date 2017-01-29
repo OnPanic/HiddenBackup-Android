@@ -6,3 +6,5 @@
 /build
 /captures
 .externalNativeBuild
+external
+app/src/main/res/raw/
